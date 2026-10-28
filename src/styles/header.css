@@ -348,6 +348,27 @@
 .site-dropdown a:hover,
 .site-dropdown a[aria-current='page'] { background: #f7f5f0; color: #a8520c; }
 
+/* ---------- Breadcrumb (used on dark page heroes) ---------- */
+
+.breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+  color: #a3a7a1;
+  font: 600 .8125rem/1.2 'DM Sans', sans-serif;
+}
+
+.breadcrumb li + li::before { margin-right: 8px; color: #6c6f6a; content: '/'; }
+.breadcrumb a { transition: color .2s ease; }
+.breadcrumb a:hover { color: #fff; }
+.breadcrumb [aria-current] { color: var(--hp-orange-on-dark, #f08a2e); }
+
+@media (max-width: 640px) { .breadcrumb ol { margin-bottom: 24px; } }
+
 /* ---------- Menu toggle and mobile drawer ---------- */
 
 .site-menu-toggle {

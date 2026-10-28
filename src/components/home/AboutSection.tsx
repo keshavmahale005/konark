@@ -1,8 +1,13 @@
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Factory, Flag, LayoutGrid, MapPin } from 'lucide-react';
 import RevealGroup from '../common/RevealGroup';
 import { Eyebrow } from '../common/SectionTitle';
 
-const stats=[['1994','Konark Engineers inception'],['3','Integrated group companies'],['12','Industry segments listed'],['Pan India','Project execution reach']];
+const stats=[
+  {value:'1994', label:'Konark Engineers inception', Icon:Flag},
+  {value:'3', label:'Integrated group companies', Icon:Factory},
+  {value:'12', label:'Industry segments listed', Icon:LayoutGrid},
+  {value:'Pan India', label:'Project execution reach', Icon:MapPin}
+];
 
 export default function AboutSection(){
   return <section className="hp-section hp-intro" id="intro" aria-labelledby="hp-intro-title">
@@ -19,10 +24,14 @@ export default function AboutSection(){
         </div>
       </RevealGroup>
       <RevealGroup className="hp-stats">
-        {stats.map(([value,label],i)=><div className="hp-stat" key={label}>
-          <span className="hp-stat__index">{String(i+1).padStart(2,'0')}</span>
+        {stats.map(({value,label,Icon},i)=><div className="hp-stat" key={label}>
+          <div className="hp-stat__top">
+            <span className="hp-stat__icon"><Icon size={21} strokeWidth={1.9} aria-hidden="true"/></span>
+            <span className="hp-stat__index">{String(i+1).padStart(2,'0')}</span>
+          </div>
           <strong>{value}</strong>
           <span className="hp-stat__label">{label}</span>
+          <Icon className="hp-stat__watermark" strokeWidth={1.25} aria-hidden="true"/>
         </div>)}
       </RevealGroup>
     </div>

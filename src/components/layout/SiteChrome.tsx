@@ -1,10 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FormEvent, PointerEvent, ReactNode } from 'react';
-import { ArrowRight, ArrowUpRight, Briefcase, ChevronDown, X, Phone, Mail, MapPin, Users } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Briefcase, Building, ChevronDown, X, Phone, Mail, MapPin, User, Users } from 'lucide-react';
 import { navigation } from '../../data/navigation';
 import { productPages } from '../../data/productPages';
+import { productGroups } from '../../data/products';
 import '../../styles/header.css';
-function Eyebrow({children,light=false}:{children:ReactNode;light?:boolean}){return <div className={`eyebrow ${light?'light':''}`}><i/>{children}</div>}function QuoteDialog({onClose}:{onClose:()=>void}){
+function Eyebrow({children,light=false}:{children:ReactNode;light?:boolean}){return <div className={`eyebrow ${light?'light':''}`}><i/>{children}</div>}// Same fields, types and required rules as before; the icons are decorative.
+const quoteFields:{name:string;label:string;Icon:typeof User;type?:string;autoComplete:string;required?:boolean}[]=[
+  {name:'name',label:'Name',Icon:User,autoComplete:'name',required:true},
+  {name:'mobile',label:'Mobile',Icon:Phone,type:'tel',autoComplete:'tel',required:true},
+  {name:'email',label:'Email',Icon:Mail,type:'email',autoComplete:'email',required:true},
+  {name:'company',label:'Company',Icon:Building,autoComplete:'organization'},
+  {name:'city',label:'City',Icon:MapPin,autoComplete:'address-level2'}
+];
+function QuoteDialog({onClose}:{onClose:()=>void}){
   const [notice,setNotice]=useState('');
   const dialogRef=useRef<HTMLElement|null>(null);
   useEffect(()=>{
@@ -25,18 +34,27 @@ function Eyebrow({children,light=false}:{children:ReactNode;light?:boolean}){ret
     return()=>{window.removeEventListener('keydown',key);document.body.style.overflow=previousOverflow;previousFocus?.focus()};
   },[onClose]);
   function send(event:FormEvent<HTMLFormElement>){event.preventDefault();const data=new FormData(event.currentTarget);const body=[`Name: ${data.get('name')}`,`Mobile: ${data.get('mobile')}`,`Email: ${data.get('email')}`,`Company: ${data.get('company')}`,`City: ${data.get('city')}`].join('\n');setNotice('Your email application should open. Review the request and send it to Konark Global.');window.location.href=`mailto:sales@konarkglobal.com?subject=${encodeURIComponent('Get a quote')}&body=${encodeURIComponent(body)}`}
-  return <div className="modal-backdrop" role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget)onClose()}}><section ref={dialogRef} className="quote-dialog" role="dialog" aria-modal="true" aria-labelledby="quote-heading" aria-describedby="quote-description"><button className="quote-close" onClick={onClose} aria-label="Close quote request"><X/></button><Eyebrow>Konark Global</Eyebrow><h2 id="quote-heading">Get a quote</h2><p id="quote-description">Share your contact details and prepare an email request to the sales team.</p><form className="quote-form" onSubmit={send}><label>Name<input name="name" autoComplete="name" required/></label><label>Mobile<input name="mobile" type="tel" autoComplete="tel" required/></label><label>Email<input name="email" type="email" autoComplete="email" required/></label><label>Company<input name="company" autoComplete="organization"/></label><label>City<input name="city" autoComplete="address-level2"/></label><div className="quote-actions"><button className="button dark-button" type="submit">Prepare email <ArrowUpRight size={16}/></button><button className="cancel-button" type="button" onClick={onClose}>Cancel</button></div>{notice&&<p className="form-note" role="status">{notice}</p>}</form></section></div>;
+  return <div className="modal-backdrop" role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget)onClose()}}>
+    <section ref={dialogRef} className="quote-dialog" role="dialog" aria-modal="true" aria-labelledby="quote-heading" aria-describedby="quote-description">
+      <header className="quote-dialog__head">
+        <span className="quote-dialog__rays" aria-hidden="true"/>
+        <button className="quote-close" type="button" onClick={onClose} aria-label="Close quote request"><X size={18}/></button>
+        <Eyebrow light>Konark Global</Eyebrow>
+        <h2 id="quote-heading">Get a quote</h2>
+        <p id="quote-description">Share your contact details and prepare an email request to the sales team.</p>
+      </header>
+      <form className="quote-form" onSubmit={send}>
+        {quoteFields.map(({name,label,Icon,type='text',autoComplete,required})=><label className={`quote-field quote-field--${name}`} key={name}>
+          <span>{label}{required&&<b aria-hidden="true">*</b>}</span>
+          <span className="quote-input"><Icon size={16} aria-hidden="true"/><input name={name} type={type} autoComplete={autoComplete} required={required}/></span>
+        </label>)}
+        <div className="quote-actions"><button className="quote-submit" type="submit">Prepare email <ArrowUpRight size={16}/></button><button className="cancel-button" type="button" onClick={onClose}>Cancel</button></div>
+        {notice&&<p className="form-note" role="status">{notice}</p>}
+      </form>
+    </section>
+  </div>;
 }type MenuId='products'|'careers';
 const careerLinks:[string,string,typeof Briefcase][]=[['Career','/career',Briefcase],['Join the Team','/join_the_team',Users]];
-// Product pages are grouped into families by their eyebrow; each page lands in the first family whose rule matches.
-const productFamilies:{title:string;match:(eyebrow:string)=>boolean}[]=[
-  {title:'Boilers & heaters',match:e=>/boiler|heater|heat pump|heat recovery/i.test(e)&&!/chemicals|house products/i.test(e)},
-  {title:'Water treatment & chemicals',match:e=>/chemicals|water|effluent/i.test(e)&&!/paper chemicals|oil-field/i.test(e)},
-  {title:'Paper & oil-field chemicals',match:e=>/paper chemicals|oil-field/i.test(e)},
-  {title:'Steam, enviro & spares',match:e=>/steam accessories|condensate|boiler house|enviro|spares/i.test(e)},
-  {title:'Partner equipment',match:()=>true}
-];
-const productGroups=productFamilies.map((family,index)=>({title:family.title,items:productPages.filter(page=>productFamilies.findIndex(f=>f.match(page.eyebrow))===index)}));
 const megaColumns=[[productGroups[0]],[productGroups[1]],[productGroups[2]],[productGroups[3],productGroups[4]]];
 const primaryLinks=navigation.filter(([,p])=>!careerLinks.some(([,c])=>c===p));
 

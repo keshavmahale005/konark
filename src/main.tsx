@@ -4,4 +4,5 @@ import { createRoot } from 'react-dom/client';
 import './styles/global.css';
 import App from './App';
 import './styles/usability.css';
+import './styles/quote-dialog.css';
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App/></React.StrictMode>);

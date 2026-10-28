@@ -1,0 +1,1 @@
+export const navigation: [string,string][] = [['About Us','/about_us'],['Products','/products'],['Projects','/projects'],['Services','/services'],['Manufacturing','/manufacturing'],['Industries','/industries'],['Gallery','/gallery'],['Contact','/contact_us'],['Career','/career'],['Join the Team','/join_the_team']];

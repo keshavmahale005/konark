@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const products=fs.readFileSync('src/data/productPages.ts','utf8');
+const productRoutes=[...products.matchAll(/path:\s*'([^']+)'/g)].map(match=>match[1]);
+assert.equal(new Set(productRoutes).size,productRoutes.length,'Product routes must be unique');
+const nav=fs.readFileSync('src/data/navigation.ts','utf8');
+const mainRoutes=[...nav.matchAll(/'\/(?:[^']*)'/g)].map(match=>match[0].slice(1,-1));
+const app=fs.readFileSync('src/App.tsx','utf8');
+for(const route of ['/',...mainRoutes])assert.ok(app.includes(`'${route}'`),`Missing main route in App: ${route}`);
+const sitemap=fs.readFileSync('public/sitemap.xml','utf8');
+const sitemapRoutes=[...sitemap.matchAll(/<loc>https:\/\/www\.konarkglobal\.com([^<]*)<\/loc>/g)].map(match=>match[1]||'/');
+assert.equal(new Set(sitemapRoutes).size,sitemapRoutes.length,'Sitemap routes must be unique');
+for(const route of ['/',...mainRoutes,...productRoutes])assert.ok(sitemapRoutes.includes(route),`Route missing from sitemap: ${route}`);
+const sourceFiles=['src/App.tsx','src/components/layout/SiteChrome.tsx','src/components/projects/ProjectGallery.tsx','src/components/projects/ManufacturingGallery.tsx'];
+for(const file of sourceFiles)assert.ok(!/href\s*=\s*["']#["']/.test(fs.readFileSync(file,'utf8')),`Placeholder href found in ${file}`);
+assert.match(fs.readFileSync('public/robots.txt','utf8'),/Sitemap:\s+https:\/\/www\.konarkglobal\.com\/sitemap\.xml/);
+console.log(`Verified ${mainRoutes.length} navigation routes, ${productRoutes.length} product routes, and ${sitemapRoutes.length} sitemap entries; no placeholder hrefs in key components.`);

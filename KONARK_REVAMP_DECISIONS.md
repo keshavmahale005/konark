@@ -1,0 +1,41 @@
+# Konark Global Revamp — Decisions
+
+## Source and factual accuracy
+
+- `www.konarkglobal.com` is the source of truth. Source extraction or access failure is documented rather than papered over with invented copy.
+- Do not infer social profile destinations, form backends, business claims, specifications, or image identity from filenames alone.
+- The source's 100 Cr by 2025 vision is displayed as a historical target, not a current commitment.
+- Source pages returned cache miss / HTTP 406 in some cases. Their React routes remain with notices or safe career fallback; complete copy is not claimed.
+
+## Visual system
+
+- Use warm off-white, charcoal, white and restrained orange as a provisional brand-consistent palette. Replace provisional values only after sampling the actual logo.
+- Typography: Manrope headings and DM Sans body copy, with CSS `clamp()` sizing.
+- Use cinematic original industrial hero photography, editorial layouts, accessible contrast and responsive card grids.
+- Original logo is unavailable locally; do not recreate or fake the symbol. The existing plain wordmark is a temporary fallback, pending retrieval.
+
+## Architecture and behavior
+
+- Preserve React + TypeScript + Vite and existing project config.
+- Preserve source URL paths. Product details use `src/data/productPages.ts` and `ProductDetail.tsx`; project/manufacturing galleries have their own data/components.
+- CSS transitions, hero keyframes and Intersection Observer reveal groups avoid a motion package; reduced-motion users skip reveal movement.
+- Use source images by official URLs until they can be downloaded and verified locally. Do not use unrelated stock photos.
+- Contact and career forms mirror verified source fields. Since server endpoints could not be inspected, prepare honest mailto drafts and tell applicants to attach a CV manually.
+- Sitemap contains known routes. Product categories without verified internal route targets remain navigable through the catalog and detail index.
+- Product details with restricted source content are never given fabricated technical specifications.
+
+## Workflow and safety
+
+- No push or external publication without authorization.
+- Workspace requests to the live site fail; only public reader/search access has worked.
+- Git metadata is read-only in this environment; do not claim a commit exists.
+- `npm run build` runs `tsc -b && vite build`; the typecheck and production bundle both pass.
+- Keep the continuation and status docs updated after meaningful changes.
+## Audit decisions — 2026-10-28
+
+- About source was reopened and compared section by section before changing page text.
+- For portrait/certificate/feature imagery, use only exact image URLs exposed by the official About page. Keep the original alt/caption text; local bytes and visual content remain unverified until the source can be downloaded.
+- Keep Career and Join the Team as distinct routes because the source navigation exposes both. Remove the duplicate Join the Team item only from the footer’s redundant quick-link list; the route remains reachable from primary navigation.
+- Use a single vertical chronological timeline to make all six roadmap milestones and their source descriptions readable without a confusing wrap from 2012 back to 2017.
+
+- User-provided logo asset: `public/images/logo/logo.png` (PNG, 272 × 146, RGBA). Used directly in header and footer; source aspect ratio is preserved and the footer has a white backing to retain contrast.

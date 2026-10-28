@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+const site='https://www.konarkglobal.com';
+const main=['/','/about_us','/products','/projects','/services','/manufacturing','/industries','/gallery','/contact_us','/career','/join_the_team','/sitemap'];
+const source=fs.readFileSync('src/data/productPages.ts','utf8');
+for(const match of source.matchAll(/path:\s*'([^']+)'/g))main.push(match[1]);
+const routes=[...new Set(main)];
+const urls=routes.map(route=>`  <url><loc>${site}${route==='/'?'/':route}</loc></url>`).join('\n');
+const xml=`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
+fs.writeFileSync('public/sitemap.xml',xml,'utf8');
+fs.writeFileSync('public/robots.txt',`User-agent: *\nAllow: /\nSitemap: ${site}/sitemap.xml\n`,'utf8');
+console.log(`Wrote ${routes.length} canonical routes.`);

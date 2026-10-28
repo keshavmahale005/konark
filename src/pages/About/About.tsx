@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Info, MapPin } from 'lucide-react';
 import Breadcrumb from '../../components/layout/Breadcrumb';
 import RevealGroup from '../../components/common/RevealGroup';
@@ -8,32 +7,7 @@ import { aboutFeatureImage, awards, coreValues, leaders, missions, operationArea
 import '../../styles/home.css';
 import '../../styles/about.css';
 
-const pageSections=[['overview','Overview'],['vision','Vision & values'],['mission','Mission'],['leadership','Leadership'],['awards','Awards'],['operations','Operations'],['roadmap','Road map']];
 const pad=(n:number)=>String(n).padStart(2,'0');
-
-function SectionNav(){
-  const [active,setActive]=useState(pageSections[0][0]);
-  const listRef=useRef<HTMLUListElement>(null);
-  useEffect(()=>{
-    const targets=pageSections.map(([id])=>document.getElementById(id)).filter((el):el is HTMLElement=>el!==null);
-    if(!('IntersectionObserver' in window))return;
-    // A section counts as current while it crosses the middle band of the viewport.
-    const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)setActive(entry.target.id)}),{rootMargin:'-45% 0px -50% 0px'});
-    targets.forEach(target=>observer.observe(target));
-    return()=>observer.disconnect();
-  },[]);
-  useEffect(()=>{
-    // On narrow screens the bar scrolls sideways; keep the current link centred in it.
-    const list=listRef.current,link=list?.querySelector<HTMLElement>('.is-active');
-    if(!list||!link||list.scrollWidth<=list.clientWidth)return;
-    list.scrollTo({left:link.getBoundingClientRect().left-list.getBoundingClientRect().left+list.scrollLeft-(list.clientWidth-link.offsetWidth)/2,behavior:'smooth'});
-  },[active]);
-  return <nav className="ab-subnav" aria-label="On this page">
-    <div className="hp-shell"><ul ref={listRef}>
-      {pageSections.map(([id,label])=><li key={id}><a href={`#${id}`} className={active===id?'is-active':''} aria-current={active===id?'true':undefined}>{label}</a></li>)}
-    </ul></div>
-  </nav>;
-}
 
 export default function About(){
   return <div className="about-page">
@@ -53,7 +27,6 @@ export default function About(){
       </div>
     </section>
 
-    <SectionNav/>
 
     <section className="hp-section ab-overview" id="overview" aria-label="Overview">
       <div className="hp-shell">

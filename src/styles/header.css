@@ -286,18 +286,28 @@
   transition-delay: 0s;
 }
 
+/* The nav is the panel's positioned ancestor, but Header (SiteChrome.tsx) measures the header row and
+   sets --mega-x / --mega-w / --mega-gap / --mega-max, so the panel spans the row edge to edge and opens
+   10px below it. The top padding is an invisible bridge from the trigger, keeping hover-open intact. */
 .site-mega {
-  width: min(980px, calc(100vw - 48px));
-  padding-top: 14px;
+  left: var(--mega-x, 0px);
+  width: var(--mega-w, min(1320px, calc(100vw - 48px)));
+  padding-top: calc(var(--mega-gap, 14px) + 10px);
+  translate: 0 8px;
 }
 
+.site-nav__item.is-open > .site-mega { translate: 0 0; }
+
+/* Scrolls internally when the viewport is too short; scrolling inside never moves the page. */
 .site-mega__inner {
   display: grid;
-  grid-template-columns: 210px minmax(0, 1fr);
-  gap: 24px;
-  max-height: calc(100vh - 150px);
-  padding: 24px 32px 24px 24px;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 28px;
+  max-height: max(240px, var(--mega-max, calc(100vh - 150px)));
+  padding: 22px 28px 24px 22px;
   overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
   border: 1px solid #e8e3da;
   border-radius: 20px;
   background: #fff;
@@ -305,8 +315,10 @@
 }
 
 .site-mega__intro {
+  position: sticky;
+  top: 0;
   align-self: start;
-  padding: 24px;
+  padding: 22px;
   border-radius: 14px;
   background: #f7f5f0;
 }
@@ -348,11 +360,13 @@
 
 .site-mega__all:hover { background: #a8520c; }
 
+/* One grid column per entry in megaColumns (four), so no family wraps under another.
+   The top padding lines the family titles up with the intro card's eyebrow. */
 .site-mega__columns {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 22px;
-  padding-top: 8px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px;
+  padding-top: 22px;
 }
 
 .site-mega__group + .site-mega__group { margin-top: 24px; }
@@ -361,12 +375,12 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 0 0 10px;
+  margin: 0 0 8px;
   padding-bottom: 10px;
   border-bottom: 1px solid #eee9e0;
   color: #1f201f;
-  font: 700 .75rem/1.2 'DM Sans', sans-serif;
-  letter-spacing: .08em;
+  font: 700 .6875rem/1.25 'DM Sans', sans-serif;
+  letter-spacing: .06em;
   text-transform: uppercase;
 }
 
@@ -498,6 +512,16 @@
 .site-menu-toggle.is-open span:nth-child(2) { width: 18px; margin-left: 0; transform: translateY(-4px) rotate(-45deg); }
 
 .site-drawer { display: none; }
+
+/* Header row narrower than 1320px: slimmer intro, and room for two-line family titles so the
+   item lists still start on one line across all four columns. */
+@media (max-width: 1447px) {
+  .site-mega__inner { grid-template-columns: 196px minmax(0, 1fr); gap: 22px; padding-right: 22px; }
+  .site-mega__intro { padding: 20px; }
+  .site-mega__columns { gap: 22px; padding-top: 20px; }
+  .site-mega__columns > div > .site-mega__group:first-child .site-mega__group-title { align-items: flex-end; min-height: calc(2.5em + 10px); }
+  .site-mega__columns > div > .site-mega__group:first-child .site-mega__group-title::before { margin-bottom: 4px; }
+}
 
 @media (max-width: 1320px) {
   .site-header__inner { gap: 14px; }

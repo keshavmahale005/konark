@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { FormEvent, PointerEvent, ReactNode } from 'react';
 import { ArrowRight, ArrowUpRight, Briefcase, Building, ChevronDown, X, Phone, Mail, MapPin, User, Users } from 'lucide-react';
 import { navigation } from '../../data/navigation';
@@ -107,6 +107,25 @@ function Header(){
     window.addEventListener('resize',rest);
     return()=>window.removeEventListener('resize',rest);
   },[rest]);
+  // The mega menu hangs from the nav (its positioned ancestor) but lines up with the whole header row:
+  // directly beneath it, the same width, and no taller than the viewport space left below it.
+  const placeMega=useCallback(()=>{
+    const nav=navRef.current,row=nav?.parentElement;
+    if(!nav||!row)return;
+    const n=nav.getBoundingClientRect(),r=row.getBoundingClientRect();
+    nav.style.setProperty('--mega-x',`${r.left-n.left}px`);
+    nav.style.setProperty('--mega-w',`${r.width}px`);
+    nav.style.setProperty('--mega-gap',`${r.bottom-n.bottom}px`);
+    nav.style.setProperty('--mega-max',`${document.documentElement.clientHeight-r.bottom-26}px`);
+  },[]);
+  useLayoutEffect(()=>{
+    if(menu!=='products')return;
+    placeMega();
+    // The row shrinks into a floating island on scroll, so re-measure while the menu is open.
+    const row=navRef.current?.parentElement;
+    window.addEventListener('resize',placeMega);window.addEventListener('scroll',placeMega,{passive:true});row?.addEventListener('transitionend',placeMega);
+    return()=>{window.removeEventListener('resize',placeMega);window.removeEventListener('scroll',placeMega);row?.removeEventListener('transitionend',placeMega)};
+  },[menu,placeMega]);
   const glideTo=(event:{target:EventTarget})=>{const link=(event.target as HTMLElement).closest('.site-nav__link');if(link)glide(link)};
   const hoverOpen=(event:PointerEvent<HTMLElement>,id:MenuId)=>{if(event.pointerType!=='mouse')return;window.clearTimeout(closeTimer.current);if(menu!==id)hoverOpened.current=id;setMenu(id)};
   const hoverClose=(event:PointerEvent<HTMLElement>)=>{if(event.pointerType!=='mouse')return;closeTimer.current=window.setTimeout(()=>setMenu(null),160)};

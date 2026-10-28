@@ -77,3 +77,4 @@
 - Registered custom properties are page-prefixed (`--mf-hx`, `--gl-ap`, …) because `@property` is global.
 - `components/projects/ProjectGallery.tsx` and `ManufacturingGallery.tsx` are no longer imported anywhere.
 - Merge with origin/main (2026-10-28): kept teammates' About/Products/Contact/Career pages and these page moves; Products mega menu uses the teammate's 4-column layout from `data/products.ts`.
+- Header refresh (2026-10-28): top bar keeps its tagline and contacts and adds a "Satpur, Nashik" link to the Contact page's maps search; nav links sit in a pill track with a gliding white indicator that rests on the current page; pill CTA with arrow chip; on scroll the 80px bar stays put while its inner row becomes a floating glass island (64px). Top bar 40px + header 80px are unchanged, so hero offsets still hold. Clicking a menu trigger right after it opened on hover no longer closes it.

@@ -57,11 +57,13 @@ function QuoteDialog({onClose}:{onClose:()=>void}){
 const careerLinks:[string,string,typeof Briefcase][]=[['Career','/career',Briefcase],['Join the Team','/join_the_team',Users]];
 const megaColumns=[[productGroups[0]],[productGroups[1]],[productGroups[2]],[productGroups[3],productGroups[4]]];
 const primaryLinks=navigation.filter(([,p])=>!careerLinks.some(([,c])=>c===p));
+// Same address and maps search as the Contact page.
+const mapsUrl=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('C-14/2, M.I.D.C. Industrial Area, Satpur, Nashik - 422 007, Maharashtra, India.')}`;
 
 function Header(){
   const [open,setOpen]=useState(false),[scrolled,setScrolled]=useState(false),[quoteOpen,setQuoteOpen]=useState(false);
   const [menu,setMenu]=useState<MenuId|null>(null),[sub,setSub]=useState<MenuId|null>(null);
-  const closeTimer=useRef(0),headerRef=useRef<HTMLElement>(null),toggleRef=useRef<HTMLButtonElement>(null);
+  const closeTimer=useRef(0),headerRef=useRef<HTMLElement>(null),toggleRef=useRef<HTMLButtonElement>(null),navRef=useRef<HTMLElement>(null),hoverOpened=useRef<MenuId|null>(null);
   const path=location.pathname;
   const productsActive=path==='/products'||productPages.some(item=>item.path===path);
   const careersActive=careerLinks.some(([,p])=>p===path);
@@ -84,18 +86,40 @@ function Header(){
     window.addEventListener('keydown',key);window.addEventListener('resize',resize);
     return()=>{window.removeEventListener('keydown',key);window.removeEventListener('resize',resize);document.body.style.overflow=previousOverflow};
   },[open]);
-  const hoverOpen=(event:PointerEvent<HTMLElement>,id:MenuId)=>{if(event.pointerType!=='mouse')return;window.clearTimeout(closeTimer.current);setMenu(id)};
+  // A white pill glides to the hovered or focused link and rests on the current page (or the open menu).
+  const glide=useCallback((link:Element|null)=>{
+    const nav=navRef.current;
+    if(!nav)return;
+    if(!link){nav.classList.remove('has-glider');return;}
+    const a=link.getBoundingClientRect(),b=nav.getBoundingClientRect();
+    // First placement lands in place (fade only); later moves slide.
+    const first=!nav.classList.contains('has-glider');
+    if(first)nav.classList.add('is-placing');
+    nav.style.setProperty('--glide-x',`${a.left-b.left}px`);
+    nav.style.setProperty('--glide-w',`${a.width}px`);
+    nav.classList.add('has-glider');
+    if(first){void nav.offsetWidth;nav.classList.remove('is-placing')}
+  },[]);
+  const rest=useCallback(()=>glide(navRef.current?.querySelector(menu?`#nav-trigger-${menu}`:'.site-nav__link.is-active')??null),[glide,menu]);
+  useEffect(()=>{
+    rest();
+    document.fonts?.ready.then(rest);
+    window.addEventListener('resize',rest);
+    return()=>window.removeEventListener('resize',rest);
+  },[rest]);
+  const glideTo=(event:{target:EventTarget})=>{const link=(event.target as HTMLElement).closest('.site-nav__link');if(link)glide(link)};
+  const hoverOpen=(event:PointerEvent<HTMLElement>,id:MenuId)=>{if(event.pointerType!=='mouse')return;window.clearTimeout(closeTimer.current);if(menu!==id)hoverOpened.current=id;setMenu(id)};
   const hoverClose=(event:PointerEvent<HTMLElement>)=>{if(event.pointerType!=='mouse')return;closeTimer.current=window.setTimeout(()=>setMenu(null),160)};
   const itemProps=(id:MenuId)=>({className:`site-nav__item has-${id==='products'?'mega':'dropdown'}${menu===id?' is-open':''}`,onPointerEnter:(event:PointerEvent<HTMLElement>)=>hoverOpen(event,id),onPointerLeave:hoverClose});
-  const triggerProps=(id:MenuId,active:boolean)=>({id:`nav-trigger-${id}`,type:'button' as const,className:`site-nav__link site-nav__trigger${active?' is-active':''}`,'aria-expanded':menu===id,'aria-controls':`nav-panel-${id}`,onClick:()=>setMenu(menu===id?null:id)});
+  const triggerProps=(id:MenuId,active:boolean)=>({id:`nav-trigger-${id}`,type:'button' as const,className:`site-nav__link site-nav__trigger${active?' is-active':''}`,'aria-expanded':menu===id,'aria-controls':`nav-panel-${id}`,onClick:()=>{if(menu===id&&hoverOpened.current===id){hoverOpened.current=null;return}hoverOpened.current=null;setMenu(menu===id?null:id)}});
   const current=(p:string)=>path===p?'page' as const:undefined;
   return <>
     <div className="site-topbar">
       <div className="site-shell site-topbar__inner">
-        <span className="site-topbar__tag"><i aria-hidden="true"/>Industrial equipment · Engineering · Energy efficiency</span>
+        <p className="site-topbar__tag"><i aria-hidden="true"/><span>Industrial equipment</span><span>Engineering</span><span>Energy efficiency</span></p>
         <div className="site-topbar__contact">
+          <a className="site-topbar__place" href={mapsUrl} target="_blank" rel="noreferrer"><MapPin size={14} aria-hidden="true"/>Satpur, Nashik</a>
           <a href="tel:+917888008030"><Phone size={14} aria-hidden="true"/>+91 78880 08030</a>
-          <i aria-hidden="true"/>
           <a href="mailto:sales@konarkglobal.com"><Mail size={14} aria-hidden="true"/>sales@konarkglobal.com</a>
         </div>
       </div>
@@ -103,8 +127,9 @@ function Header(){
     <header ref={headerRef} className={`site-header${scrolled?' is-scrolled':''}`}>
       <div className="site-shell site-header__inner">
         <a className="site-brand" href="/" aria-label="Konark Global home"><img src="/images/logo/logo.png" alt="Konark Global" width="272" height="146"/></a>
-        <nav className="site-nav" aria-label="Primary navigation">
-          <ul>
+        <nav ref={navRef} className="site-nav" aria-label="Primary navigation">
+          <span className="site-nav__glider" aria-hidden="true"/>
+          <ul onPointerOver={event=>{if(event.pointerType==='mouse')glideTo(event)}} onPointerLeave={rest} onFocus={glideTo} onBlur={rest}>
             {primaryLinks.map(([name,p])=>name==='Products'?<li key={p} {...itemProps('products')}>
               <button {...triggerProps('products',productsActive)}>Products<ChevronDown size={15} aria-hidden="true"/></button>
               <div className="site-mega" id="nav-panel-products">
@@ -133,8 +158,8 @@ function Header(){
           </ul>
         </nav>
         <div className="site-header__actions">
-          <button className="site-cta" type="button" onClick={()=>setQuoteOpen(true)}>Get a quote <ArrowUpRight size={16}/></button>
-          <button ref={toggleRef} className={`site-menu-toggle${open?' is-open':''}`} type="button" aria-label={open?'Close menu':'Open menu'} aria-expanded={open} aria-controls="site-drawer" onClick={()=>setOpen(!open)}><span/><span/><span/></button>
+          <button className="site-cta" type="button" onClick={()=>setQuoteOpen(true)}>Get a quote <span className="site-cta__icon" aria-hidden="true"><ArrowUpRight size={16}/></span></button>
+          <button ref={toggleRef} className={`site-menu-toggle${open?' is-open':''}`} type="button" aria-label={open?'Close menu':'Open menu'} aria-expanded={open} aria-controls="site-drawer" onClick={()=>setOpen(!open)}><span/><span/></button>
         </div>
       </div>
     </header>
@@ -161,7 +186,7 @@ function Header(){
           </li>
         </ul>
         <div className="site-drawer__footer">
-          <button className="site-cta" type="button" onClick={()=>{setOpen(false);setQuoteOpen(true)}}>Get a quote <ArrowUpRight size={16}/></button>
+          <button className="site-cta" type="button" onClick={()=>{setOpen(false);setQuoteOpen(true)}}>Get a quote <span className="site-cta__icon" aria-hidden="true"><ArrowUpRight size={16}/></span></button>
           <a href="tel:+917888008030"><Phone size={16}/>+91 78880 08030</a>
           <a href="mailto:sales@konarkglobal.com"><Mail size={16}/>sales@konarkglobal.com</a>
         </div>

@@ -39,3 +39,11 @@
 - Use a single vertical chronological timeline to make all six roadmap milestones and their source descriptions readable without a confusing wrap from 2012 back to 2017.
 
 - User-provided logo asset: `public/images/logo/logo.png` (PNG, 272 × 146, RGBA). Used directly in header and footer; source aspect ratio is preserved and the footer has a white backing to retain contrast.
+
+## Homepage redesign — 2026-10-28
+
+- Homepage moved out of `App.tsx` into `src/pages/Home/Home.tsx` plus `src/components/home/*`; data in `src/data/{industries,testimonials,partners}.ts`. All original homepage copy, CTAs and destinations are preserved verbatim (scripted check against the previous `Home()`).
+- Homepage palette uses colours sampled from `logo.png`: orange `#e97b1a`, charcoal; `#a8520c` for small orange text on light backgrounds (AA). `src/styles/home.css` is fully scoped to `.home-page`.
+- Additions reuse existing site content only: channel-partner strip (footer list), project showcase (`projectGallery`), phone/email in the closing CTA (topline). Group-company rows now link to /products, /projects, /manufacturing.
+- Fixed CSS load order in `src/main.tsx`: `global.css` now loads before `App` so `responsive.css` media queries apply (previously the mobile menu never appeared and header/footer overflowed at ≤900px on every page). Desktop (>1180px) rendering is unchanged because every `responsive.css` rule sits inside a media query.
+- Navbar redesign (shared `Header` in `SiteChrome.tsx`, styles in `src/styles/header.css`): larger, higher-contrast nav labels with a clear active state; Products opens a mega menu grouping all product pages into five families derived from each page's eyebrow; Career and Join the Team grouped under a "Careers" dropdown (both routes unchanged); hamburger drawer at ≤1180px with product/career accordions. Old `.topline/.header/.desktop-nav/.mobile-nav` CSS is now unused. Hero grid overlay removed on request.

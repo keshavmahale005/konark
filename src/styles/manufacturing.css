@@ -4,8 +4,8 @@
    inspection scan, exploded-view assembly, deck deal, polish shine, pinned
    horizontal track and a heat-map headline. */
 
-@property --hx { syntax: '<length>'; inherits: true; initial-value: -400px; }
-@property --hy { syntax: '<length>'; inherits: true; initial-value: -400px; }
+@property --mf-hx { syntax: '<length>'; inherits: true; initial-value: -400px; }
+@property --mf-hy { syntax: '<length>'; inherits: true; initial-value: -400px; }
 
 /* ---------- Hero ---------- */
 
@@ -683,7 +683,7 @@
 .mf-page .mf-cta__rivets i:nth-child(4) { right: 18px; bottom: 18px; }
 
 .mf-page .mf-cta__title {
-  background: radial-gradient(240px circle at var(--hx) var(--hy), #fff4d6 0%, #ffb347 18%, #f08a2e 36%, #fff 64%);
+  background: radial-gradient(240px circle at var(--mf-hx) var(--mf-hy), #fff4d6 0%, #ffb347 18%, #f08a2e 36%, #fff 64%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -753,8 +753,8 @@
 }
 
 @keyframes mfHeatPass {
-  0% { --hx: -260px; --hy: 50px; }
-  100% { --hx: 1100px; --hy: 90px; }
+  0% { --mf-hx: -260px; --mf-hy: 50px; }
+  100% { --mf-hx: 1100px; --mf-hy: 90px; }
 }
 
 /* ---------- Responsive ---------- */

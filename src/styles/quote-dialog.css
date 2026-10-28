@@ -1,0 +1,228 @@
+/* "Get a quote" dialog (shared header). Loaded last, so it overrides the older .quote-* rules in global.css. */
+
+/* Above the sticky header (z-index 30) and the mobile drawer (29). */
+.modal-backdrop {
+  z-index: 100;
+  padding: 20px;
+  background: rgb(16 17 16 / 70%);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  animation: quoteBackdropIn .22s ease-out both;
+}
+
+.quote-dialog {
+  isolation: isolate;
+  width: min(460px, 100%);
+  max-height: calc(100svh - 40px);
+  padding: 0;
+  overflow: auto;
+  border: 0;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 40px 90px -20px rgb(0 0 0 / 55%), 0 0 0 1px rgb(255 255 255 / 6%);
+  animation: quoteDialogIn .34s cubic-bezier(.2, .75, .25, 1) both;
+}
+
+/* ---------- Dark header band ---------- */
+
+.quote-dialog__head {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 24px 26px 22px;
+  background:
+    radial-gradient(ellipse 80% 90% at 100% 0%, rgb(233 123 26 / 26%), transparent 60%),
+    #1c1d1c;
+  color: #fff;
+}
+
+.quote-dialog__rays {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  width: 520px;
+  aspect-ratio: 1;
+  translate: 50% -50%;
+  background: repeating-conic-gradient(from 0deg, rgb(233 123 26 / 14%) 0deg 1.4deg, transparent 1.4deg 10deg);
+  -webkit-mask-image: radial-gradient(circle, #000 0 15%, transparent 60%);
+  mask-image: radial-gradient(circle, #000 0 15%, transparent 60%);
+  animation: quoteSpin 120s linear infinite;
+  pointer-events: none;
+}
+
+.quote-dialog__head .eyebrow {
+  gap: 9px;
+  color: #d9dcd6;
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+}
+
+.quote-dialog__head .eyebrow i { width: 7px; height: 7px; box-shadow: 0 0 0 4px rgb(233 123 26 / 22%); }
+
+.quote-dialog__head h2 {
+  margin: 12px 0 6px;
+  color: #fff;
+  font: 700 1.75rem/1.1 Manrope, sans-serif;
+  letter-spacing: -.045em;
+}
+
+.quote-dialog__head p {
+  max-width: 340px;
+  margin: 0;
+  color: #b9bdb6;
+  font-size: .8125rem;
+  line-height: 1.55;
+}
+
+.quote-close {
+  top: 16px;
+  right: 16px;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 16%);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 8%);
+  color: #fff;
+  transition: background-color .2s ease, border-color .2s ease, transform .25s ease;
+}
+
+.quote-close:hover { transform: rotate(90deg); border-color: #e97b1a; background: #e97b1a; color: #1a1b1a; }
+
+/* ---------- Form ---------- */
+
+.quote-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 22px 26px 24px;
+}
+
+.quote-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  color: #1f201f;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.quote-field b { margin-left: 3px; color: #a8520c; }
+.quote-field--email { grid-column: 1 / -1; }
+
+.quote-input { position: relative; display: flex; align-items: center; }
+.quote-input svg { position: absolute; left: 13px; color: #a3a7a1; pointer-events: none; transition: color .2s ease; }
+
+.quote-form input {
+  width: 100%;
+  min-height: 0;
+  height: 44px;
+  padding: 0 12px 0 38px;
+  border: 1px solid #e0dacf;
+  border-radius: 10px;
+  outline: none;
+  background: #f7f5f0;
+  color: #1f201f;
+  font: 500 .875rem/1 'DM Sans', sans-serif;
+  box-shadow: none;
+  transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+
+.quote-form input:hover { border-color: #cbc3b5; }
+.quote-form input:focus { border-color: #e97b1a; outline: none; background: #fff; box-shadow: 0 0 0 4px rgb(233 123 26 / 16%); }
+.quote-input:focus-within svg { color: #e97b1a; }
+.quote-form input:user-invalid { border-color: #c2410c; background: #fff7f3; }
+
+/* flex-direction is set explicitly because responsive.css switches .quote-actions to a column on phones. */
+.quote-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.quote-submit {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 48px;
+  border: 0;
+  border-radius: 10px;
+  background: #e97b1a;
+  box-shadow: 0 12px 26px -14px rgb(233 123 26 / 90%);
+  color: #1a1b1a;
+  font: 700 .875rem/1 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: background-color .2s ease, translate .2s ease, box-shadow .2s ease;
+}
+
+.quote-submit svg { transition: transform .2s ease; }
+.quote-submit:hover { translate: 0 -1px; background: #f28c33; box-shadow: 0 16px 30px -14px rgb(233 123 26 / 95%); }
+.quote-submit:hover svg { transform: translate(2px, -2px); }
+
+.cancel-button {
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid #e0dacf;
+  border-radius: 10px;
+  background: #fff;
+  color: #3d3f3d;
+  font-size: .875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color .2s ease, color .2s ease;
+}
+
+.cancel-button:hover { border-color: #1f201f; color: #1f201f; text-decoration: none; }
+
+.quote-dialog .form-note {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 11px 13px;
+  border: 1px solid #b7dcc4;
+  border-radius: 10px;
+  background: #eef8f1;
+  color: #1f5d36;
+  font-size: .8125rem;
+  line-height: 1.5;
+}
+
+.quote-close:focus-visible,
+.quote-submit:focus-visible,
+.cancel-button:focus-visible { outline: 3px solid rgb(233 123 26 / 55%); outline-offset: 2px; }
+
+@keyframes quoteBackdropIn { from { opacity: 0; } to { opacity: 1; } }
+
+@keyframes quoteDialogIn {
+  from { opacity: 0; transform: translateY(16px) scale(.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes quoteSpin { to { transform: rotate(360deg); } }
+
+/* Phones: slide up as a bottom sheet. */
+@media (max-width: 600px) {
+  .modal-backdrop { align-items: end; padding: 0; }
+  .quote-dialog { width: 100%; max-height: calc(100svh - 24px); padding: 0; border-radius: 22px 22px 0 0; }
+  .quote-dialog__head { padding: 22px 20px 20px; }
+  .quote-form { padding: 18px 20px 22px; }
+  .quote-close { top: 14px; right: 14px; }
+}
+
+@media (max-width: 400px) {
+  .quote-form { grid-template-columns: minmax(0, 1fr); }
+  .quote-field--email { grid-column: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-backdrop, .quote-dialog, .quote-dialog__rays { animation: none; }
+}

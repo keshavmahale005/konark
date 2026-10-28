@@ -135,8 +135,8 @@ export function MfCTA(){
     const title=event.currentTarget.querySelector('h2');
     if(!title)return;
     const rect=title.getBoundingClientRect();
-    title.style.setProperty('--hx',`${event.clientX-rect.left}px`);
-    title.style.setProperty('--hy',`${event.clientY-rect.top}px`);
+    title.style.setProperty('--mf-hx',`${event.clientX-rect.left}px`);
+    title.style.setProperty('--mf-hy',`${event.clientY-rect.top}px`);
   };
   return <section className="mf-cta-section" aria-labelledby="mf-cta-title">
     <div className="kit-shell">

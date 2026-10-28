@@ -597,7 +597,7 @@
    Its own vocabulary, separate from the other pages: morphing glow, outline-to-fill
    title with shimmer over the hero video, highlighter marks, tracing border,
    springy zig-zag rows with wave letters, pendulum cards, block-wipe headings,
-   diagonal wipe + colour torch portraits, trophy spin with confetti, radar sweep with
+   diagonal-wipe portraits, trophy spin with confetti, radar sweep with
    blipping chips, domino milestones and a spring-in CTA. RevealGroup still supplies
    the in-view trigger (.is-revealed) and stagger (--reveal-delay). */
 
@@ -698,20 +698,8 @@
   animation: abSwing 1.8s ease-out calc(var(--reveal-delay, 0ms) * 2) both;
 }
 
-/* Leadership: diagonal wipe in; on pointer devices a colour torch follows the cursor. */
+/* Leadership: diagonal wipe in; portraits stay in their natural colour. */
 .about-page .ab-leaders__grid > .scroll-reveal.is-revealed { animation: abDiagonal 1.15s cubic-bezier(.6, .1, .2, 1) calc(var(--reveal-delay, 0ms) * 1.5) both; }
-.about-page .ab-leader__photo { position: relative; }
-.about-page .ab-leader:hover .ab-leader__photo img { transform: none; }
-.about-page .ab-leader__photo .ab-leader__colour { position: absolute; inset: 0; display: none; }
-
-@media (hover: hover) and (pointer: fine) {
-  .about-page .ab-leader__photo > img:first-child { filter: grayscale(1) contrast(1.05); }
-  .about-page .ab-leader__photo .ab-leader__colour {
-    display: block;
-    -webkit-mask: radial-gradient(circle 120px at var(--fx, -300px) var(--fy, -300px), #000 40%, transparent 100%);
-    mask: radial-gradient(circle 120px at var(--fx, -300px) var(--fy, -300px), #000 40%, transparent 100%);
-  }
-}
 
 /* Awards: spin in like a trophy; confetti bursts on hover. */
 .about-page .ab-award { position: relative; overflow: visible; }

@@ -1,4 +1,4 @@
-import type { CSSProperties, PointerEvent } from 'react';
+import type { CSSProperties } from 'react';
 import { ArrowRight, Info, MapPin } from 'lucide-react';
 import Breadcrumb from '../../components/layout/Breadcrumb';
 import RevealGroup from '../../components/common/RevealGroup';
@@ -28,29 +28,13 @@ const confetti=Array.from({length:14},(_,i)=>{
   return [Math.cos(angle)*reach,Math.sin(angle)*reach-20,(i*67)%360,confettiColours[i%confettiColours.length]] as const;
 });
 
-/** A colour copy of the portrait shows through a soft circle that follows the pointer. */
-function torch(event:PointerEvent<HTMLDivElement>){
-  if(event.pointerType!=='mouse')return;
-  const box=event.currentTarget.getBoundingClientRect();
-  event.currentTarget.style.setProperty('--fx',`${event.clientX-box.left}px`);
-  event.currentTarget.style.setProperty('--fy',`${event.clientY-box.top}px`);
-}
-function torchOff(event:PointerEvent<HTMLDivElement>){
-  event.currentTarget.style.removeProperty('--fx');
-  event.currentTarget.style.removeProperty('--fy');
-}
-
 export default function About(){
   const [cta,ctaIn]=useInView<HTMLDivElement>();
   const {videoProps,ready}=useBackgroundVideo();
   return <div className="about-page">
     <section className="ab-hero" aria-labelledby="ab-hero-title">
-      {/* aboutusvideo.mp4 plays when it is present in public/videos; until then the browser falls back to the homepage clip. */}
       <div className="ab-hero__backdrop" aria-hidden="true">
-        <video {...videoProps} className={`ab-hero__video${ready?' is-ready':''}`}>
-          <source src="/videos/aboutusvideo.mp4" type="video/mp4"/>
-          <source src="/videos/welding.mp4" type="video/mp4"/>
-        </video>
+        <video {...videoProps} className={`ab-hero__video${ready?' is-ready':''}`} src="/videos/aboutusvideo.mp4"/>
         <span className="ab-hero__shade"/>
       </div>
       <span className="ab-hero__rays" aria-hidden="true"/>
@@ -114,7 +98,7 @@ export default function About(){
         <SectionTitle id="ab-leaders-title" eyebrow="Leadership" title="Who we are" action={<p className="ab-title-note">Meet the visionary leadership team behind Konark Global – driving innovation, excellence, and industrial growth.</p>}/>
         <RevealGroup className="ab-leaders__grid">
           {leaders.map(({name,image,description})=><article className="ab-leader" key={name}>
-            <div className="ab-leader__photo" onPointerMove={torch} onPointerLeave={torchOff}><img src={image} alt="" loading="lazy" decoding="async"/><img className="ab-leader__colour" src={image} alt="" aria-hidden="true" loading="lazy" decoding="async"/></div>
+            <div className="ab-leader__photo"><img src={image} alt="" loading="lazy" decoding="async"/></div>
             <div className="ab-leader__body">
               <p className="ab-leader__role"><i aria-hidden="true"/>Director</p>
               <h3>{name}</h3>

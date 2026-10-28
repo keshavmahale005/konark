@@ -1,0 +1,190 @@
+/* Shared tokens and primitives for the Manufacturing, Industries and Gallery
+   pages (root class .kit-page). Each page layers its own motion on top. */
+
+.kit-page {
+  --k-orange: #e97b1a;
+  --k-orange-bright: #f28c33;
+  --k-orange-text: #a8520c;
+  --k-orange-large: #c4610c;
+  --k-orange-on-dark: #f08a2e;
+  --k-ink: #1f201f;
+  --k-charcoal: #1c1d1c;
+  --k-text: #3d3f3d;
+  --k-muted: #62655f;
+  --k-paper: #f7f5f0;
+  --k-sand: #efebe3;
+  --k-line: #e2ddd3;
+  --k-dark-text: #c9ccc7;
+  --k-gutter: clamp(20px, 5vw, 64px);
+  --k-ease: cubic-bezier(.2, .7, .2, 1);
+  --k-out: cubic-bezier(.16, 1, .3, 1);
+  overflow: clip;
+  background: var(--k-paper);
+  color: var(--k-text);
+}
+
+.kit-page .kit-shell {
+  width: min(1320px, calc(100% - var(--k-gutter) * 2));
+  margin-inline: auto;
+}
+
+.kit-page .kit-section {
+  position: relative;
+  padding-block: clamp(72px, 9vw, 128px);
+}
+
+.kit-page .kit-dark { background: var(--k-charcoal); color: #fff; }
+
+.kit-page .kit-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.kit-page .kit-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  color: var(--k-muted);
+  font: 700 .75rem/1.3 'DM Sans', sans-serif;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.kit-page .kit-eyebrow i {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--k-orange);
+  box-shadow: 0 0 0 4px rgb(233 123 26 / 16%);
+}
+
+.kit-page .kit-dark .kit-eyebrow,
+.kit-page .kit-eyebrow.is-light { color: #d9dcd6; }
+
+.kit-page .kit-h1 {
+  margin: 26px 0 24px;
+  color: var(--k-ink);
+  font: 700 clamp(2.7rem, 6vw, 5.8rem)/1 Manrope, sans-serif;
+  letter-spacing: -.055em;
+}
+
+.kit-page .kit-h2 {
+  margin: 20px 0 0;
+  color: var(--k-ink);
+  font: 700 clamp(2.3rem, 4.6vw, 4.4rem)/1.04 Manrope, sans-serif;
+  letter-spacing: -.052em;
+  text-wrap: balance;
+}
+
+.kit-page .kit-h1 em,
+.kit-page .kit-h2 em { color: var(--k-orange-large); font-style: normal; }
+.kit-page .kit-dark .kit-h1,
+.kit-page .kit-dark .kit-h2 { color: #fff; }
+.kit-page .kit-dark .kit-h1 em,
+.kit-page .kit-dark .kit-h2 em { color: var(--k-orange-on-dark); }
+
+.kit-page .kit-lead {
+  max-width: 34rem;
+  margin: 0;
+  color: var(--k-muted);
+  font-size: clamp(1.0625rem, 1.3vw, 1.2rem);
+  line-height: 1.7;
+}
+
+.kit-page .kit-dark .kit-lead { color: var(--k-dark-text); }
+
+.kit-page .kit-btn {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 54px;
+  padding: 0 26px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 8px;
+  font: 700 .875rem/1 'DM Sans', sans-serif;
+  letter-spacing: .01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color .25s ease, color .25s ease, box-shadow .25s ease;
+}
+
+.kit-page .kit-btn svg { flex: none; }
+
+.kit-page .kit-btn--primary {
+  background: var(--k-orange);
+  box-shadow: 0 14px 32px -14px rgb(233 123 26 / 80%);
+  color: #1a1b1a;
+}
+
+.kit-page .kit-btn--primary:hover { background: var(--k-orange-bright); }
+
+.kit-page .kit-btn--dark {
+  background: var(--k-charcoal);
+  box-shadow: 0 14px 32px -16px rgb(0 0 0 / 60%);
+  color: #fff;
+}
+
+.kit-page .kit-btn--dark:hover { background: #000; }
+
+.kit-page .kit-btn--light {
+  background: #fff;
+  box-shadow: 0 14px 32px -16px rgb(0 0 0 / 50%);
+  color: var(--k-ink);
+}
+
+.kit-page .kit-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid currentColor;
+  color: var(--k-ink);
+  font: 700 .875rem/1.2 'DM Sans', sans-serif;
+  transition: color .25s ease;
+}
+
+.kit-page .kit-dark .kit-link,
+.kit-page .kit-link.is-light { color: #fff; }
+.kit-page .kit-link:hover { color: var(--k-orange-text); }
+.kit-page .kit-dark .kit-link:hover,
+.kit-page .kit-link.is-light:hover { color: var(--k-orange-on-dark); }
+
+.kit-page a:focus-visible,
+.kit-page button:focus-visible {
+  outline: 3px solid var(--k-orange);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.kit-page .kit-contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kit-page .kit-contacts a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid rgb(255 255 255 / 35%);
+  color: #fff;
+  font-size: .9375rem;
+  font-weight: 600;
+  transition: border-color .2s ease;
+}
+
+.kit-page .kit-contacts a:hover { border-color: #fff; }

@@ -37,7 +37,7 @@ const productFamilies:{title:string;match:(eyebrow:string)=>boolean}[]=[
   {title:'Partner equipment',match:()=>true}
 ];
 const productGroups=productFamilies.map((family,index)=>({title:family.title,items:productPages.filter(page=>productFamilies.findIndex(f=>f.match(page.eyebrow))===index)}));
-const megaColumns=[[productGroups[0]],[productGroups[1]],[productGroups[2]],[productGroups[3],productGroups[4]]];
+const megaColumns=[[productGroups[0],productGroups[1]],[productGroups[2],productGroups[3]],[productGroups[4]]];
 const primaryLinks=navigation.filter(([,p])=>!careerLinks.some(([,c])=>c===p));
 
 function Header(){

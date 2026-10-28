@@ -47,3 +47,18 @@
 - Additions reuse existing site content only: channel-partner strip (footer list), project showcase (`projectGallery`), phone/email in the closing CTA (topline). Group-company rows now link to /products, /projects, /manufacturing.
 - Fixed CSS load order in `src/main.tsx`: `global.css` now loads before `App` so `responsive.css` media queries apply (previously the mobile menu never appeared and header/footer overflowed at ≤900px on every page). Desktop (>1180px) rendering is unchanged because every `responsive.css` rule sits inside a media query.
 - Navbar redesign (shared `Header` in `SiteChrome.tsx`, styles in `src/styles/header.css`): larger, higher-contrast nav labels with a clear active state; Products opens a mega menu grouping all product pages into five families derived from each page's eyebrow; Career and Join the Team grouped under a "Careers" dropdown (both routes unchanged); hamburger drawer at ≤1180px with product/career accordions. Old `.topline/.header/.desktop-nav/.mobile-nav` CSS is now unused. Hero grid overlay removed on request.
+
+## Projects page redesign — 2026-10-28
+
+- `/projects` now renders `src/pages/Projects/Projects.tsx` (sections in `src/components/projects/Project*.tsx`, styles fully scoped to `.projects-page` in `src/styles/projects.css`). `/gallery` still uses the unchanged `ProjectGallery`.
+- Copy is reused from existing pages only: hero/intro from the old Projects page, the Konark Fabtech mission sentence and the five stages it names (About), 1994/2012 milestones (About timeline), "Pan India" project reach (About areas of operation), CTA and contacts (homepage CTA). The "16 project snapshots" figure is the gallery's own count.
+- Project groups (Boilers & steam, Pipelines, Cooling, Chimneys) in `src/data/projectGroups.ts` are derived from each photo's title, not from source metadata.
+- Each section has its own motion: hero word-mask rise + counter-scrolling photo reels; odometer digits; scroll-linked process rail; expanding scope panels that self-advance; gallery curtain reveal, pointer tilt, sliding filter pill and View Transitions morph; CTA unfold, drawn underline, spotlight and magnetic button. All of it is disabled under `prefers-reduced-motion`.
+- A scrolling project-name marquee was tried and replaced by the scope panels on request.
+- Source project photos are only 258 × 172 px; the lightbox scales them up to the stage, so they look soft at large sizes until higher-resolution originals are available.
+
+## Services page redesign — 2026-10-28
+
+- `/services` now renders `src/pages/Services/Services.tsx` (sections in `src/components/services/Service*.tsx`, styles scoped to `.services-page` in `src/styles/services.css`). The service list and core competencies moved verbatim into `src/data/services.ts`; the sitemap reads the same list. Card ids `service-1`…`service-16` are kept.
+- Added copy comes from the About page only: "24/7 support through our committed team" and Konark Engineers' list of equipment it sells and services.
+- Motion was chosen not to repeat the homepage or projects page: scrambled-glyph title decode, split-flap "Now servicing" board, pressure dial (tick sweep, spring needle that leans toward the pointer), cards flipping in along diagonals with one pointer light across all borders, equipment names launching into a counter-rotating orbit (two-column board on phones), sticky competency cards that recede as the next one covers them, and a CTA that fills with rolling liquid and bubbles. All disabled under `prefers-reduced-motion`.

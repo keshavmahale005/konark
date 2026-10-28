@@ -205,14 +205,14 @@
 }
 
 .site-mega {
-  width: min(1180px, calc(100vw - 48px));
+  width: min(980px, calc(100vw - 48px));
   padding-top: 4px;
 }
 
 .site-mega__inner {
   display: grid;
-  grid-template-columns: 250px minmax(0, 1fr);
-  gap: 32px;
+  grid-template-columns: 210px minmax(0, 1fr);
+  gap: 24px;
   max-height: calc(100vh - 150px);
   padding: 24px 32px 24px 24px;
   overflow: auto;
@@ -268,8 +268,8 @@
 
 .site-mega__columns {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
   padding-top: 8px;
 }
 
@@ -301,7 +301,7 @@
 
 .site-mega__group a {
   display: block;
-  padding: 5px 0;
+  padding: 7px 0;
   color: #4a4d49;
   font-size: .8125rem;
   line-height: 1.4;

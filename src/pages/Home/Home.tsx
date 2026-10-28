@@ -8,6 +8,7 @@ import ProjectsSection from '../../components/home/ProjectsSection';
 import Testimonials from '../../components/home/Testimonials';
 import ContactCTA from '../../components/home/ContactCTA';
 import '../../styles/home.css';
+import '../../styles/home-motion.css';
 
 export default function Home(){
   return <div className="home-page">
@@ -19,6 +20,6 @@ export default function Home(){
     <CompanyCards/>
     <ProjectsSection/>
     <Testimonials/>
-    <ContactCTA/>
+    <ContactCTA motion/>
   </div>;
 }

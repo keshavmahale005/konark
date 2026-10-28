@@ -1,10 +1,47 @@
-import { ArrowDown, ArrowRight, ArrowUpRight, Factory } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { ArrowDown, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { prefersReducedMotion } from '../../hooks/useInView';
+import { useBackgroundVideo, VideoToggle } from '../common/BackgroundVideo';
 
-const heroImage='https://www.konarkglobal.com/assets/images/projects/thermax.jpg';
+const heroVideo='/videos/welding.mp4';
 
 export default function HeroSection(){
-  return <section className="hp-hero" aria-labelledby="hp-hero-title">
-    <div className="hp-hero__backdrop" aria-hidden="true"><span className="hp-hero__rays"/></div>
+  const {videoProps,available,playing,ready,toggle}=useBackgroundVideo();
+  const section=useRef<HTMLElement>(null);
+
+  // Depth parallax (pointer) and scroll-out (video zooms, copy lifts away) as CSS variables.
+  useEffect(()=>{
+    const node=section.current;
+    if(!node||prefersReducedMotion())return;
+    let frame=0,px=0,py=0;
+    const apply=()=>{
+      frame=0;
+      const box=node.getBoundingClientRect();
+      node.style.setProperty('--hm-sx',Math.min(1,Math.max(0,-box.top/box.height)).toFixed(3));
+      node.style.setProperty('--hm-px',px.toFixed(3));
+      node.style.setProperty('--hm-py',py.toFixed(3));
+    };
+    const queue=()=>{if(!frame)frame=requestAnimationFrame(apply)};
+    const move=(event:PointerEvent)=>{
+      if(event.pointerType!=='mouse')return;
+      const box=node.getBoundingClientRect();
+      px=(event.clientX-box.left)/box.width*2-1;
+      py=(event.clientY-box.top)/box.height*2-1;
+      queue();
+    };
+    const leave=()=>{px=0;py=0;queue()};
+    queue();
+    window.addEventListener('scroll',queue,{passive:true});
+    node.addEventListener('pointermove',move);
+    node.addEventListener('pointerleave',leave);
+    return()=>{cancelAnimationFrame(frame);window.removeEventListener('scroll',queue);node.removeEventListener('pointermove',move);node.removeEventListener('pointerleave',leave)};
+  },[]);
+
+  return <section ref={section} className="hp-hero" aria-labelledby="hp-hero-title">
+    <div className="hp-hero__backdrop" aria-hidden="true">
+      <video {...videoProps} className={`hp-hero__video${ready?' is-ready':''}`} src={heroVideo}/>
+      <span className="hp-hero__shade"/>
+    </div>
     <div className="hp-shell hp-hero__inner">
       <div className="hp-hero__copy">
         <p className="hp-hero__eyebrow"><i aria-hidden="true"/>Industrial solutions · Since 1994</p>
@@ -19,21 +56,13 @@ export default function HeroSection(){
           <a className="hp-link is-light" href="/about_us">Discover Konark <ArrowUpRight size={17}/></a>
         </div>
       </div>
-      <div className="hp-hero__media">
-        <div className="hp-hero__frame"><img src={heroImage} alt="" fetchPriority="high" decoding="async"/></div>
-        <div className="hp-hero__card" aria-hidden="true"><span><i/>Project execution reach</span><strong>Pan India</strong></div>
-        <div className="hp-hero__badge" aria-hidden="true">
-          <svg viewBox="0 0 120 120">
-            <defs><path id="hp-badge-ring" d="M14,60 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs>
-            <text><textPath href="#hp-badge-ring" textLength="286" lengthAdjust="spacing">INDUSTRIAL SOLUTIONS · SINCE 1994 · </textPath></text>
-          </svg>
-          <span><Factory size={22} strokeWidth={1.8}/></span>
-        </div>
-      </div>
     </div>
     <div className="hp-shell hp-hero__foot">
       <span>NASHIK, INDIA <i/> SERVING INDUSTRY</span>
-      <a href="#intro">SCROLL TO EXPLORE <ArrowDown size={15}/></a>
+      <div className="hp-hero__foot-end">
+        {available&&<VideoToggle className="hp-hero__toggle" playing={playing} onToggle={toggle}/>}
+        <a href="#intro">SCROLL TO EXPLORE <ArrowDown size={15}/></a>
+      </div>
     </div>
   </section>;
 }

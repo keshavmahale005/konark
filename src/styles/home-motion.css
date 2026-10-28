@@ -1,0 +1,267 @@
+/* Homepage motion — scoped to .home-page only (home.css primitives are shared with
+   About, Products, Contact and Career, which keep their own motion). Vocabulary not
+   used elsewhere on the site: light-sweep mask reveals, pointer depth parallax and
+   scroll-out on the hero, a glow wave along the partner logos, count-up figures with
+   landing squash and spinning watermarks, arc-path cards with a paper-peel corner,
+   shuffled pop-in, stretch-in rows with an orange flood from the
+   arrow and a scroll-drifting watermark, sliding-door photos with in-frame parallax,
+   speech-bubble quotes with an ink-splat mark, and a CTA that stretches open from a
+   line with a press ripple. RevealGroup supplies .is-revealed and --reveal-delay. */
+
+.home-page .hm-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- Hero ---------- */
+
+/* A soft-edged light sweeps left to right to reveal each element. */
+.home-page .hp-hero .hp-hero__title .hp-line > span,
+.home-page .hp-hero .hp-hero__eyebrow,
+.home-page .hp-hero .hp-hero__lead,
+.home-page .hp-hero .hp-hero__vision,
+.home-page .hp-hero .hp-hero__actions,
+.home-page .hp-hero .hp-hero__foot {
+  -webkit-mask-image: linear-gradient(90deg, #000 45%, transparent 55%);
+  mask-image: linear-gradient(90deg, #000 45%, transparent 55%);
+  -webkit-mask-size: 260% 100%;
+  mask-size: 260% 100%;
+  animation: hmSweep 1.3s cubic-bezier(.6, .1, .2, 1) var(--hm-t, .1s) both;
+}
+
+/* The mask only covers the element box; pad the title lines so descenders (g, p) aren't cut. */
+.home-page .hp-hero .hp-hero__title .hp-line > span { --hm-t: .2s; padding-bottom: .18em; margin-bottom: -.18em; }
+.home-page .hp-hero .hp-hero__title .hp-line + .hp-line > span { --hm-t: .42s; }
+.home-page .hp-hero .hp-hero__lead { --hm-t: .65s; }
+.home-page .hp-hero .hp-hero__vision { --hm-t: .8s; }
+.home-page .hp-hero .hp-hero__actions { --hm-t: .95s; }
+.home-page .hp-hero .hp-hero__foot { --hm-t: 1.1s; }
+
+/* Depth: the video drifts against the pointer, the copy with it; scrolling zooms the video and lifts the copy away. */
+.home-page .hp-hero .hp-hero__video {
+  transform: translate3d(calc(var(--hm-px, 0) * -16px), calc(var(--hm-py, 0) * -10px), 0) scale(calc(1.05 + var(--hm-sx, 0) * .14));
+  transition: opacity 1.2s ease, transform .6s cubic-bezier(.2, .7, .2, 1);
+}
+
+.home-page .hp-hero .hp-hero__copy {
+  opacity: calc(1 - var(--hm-sx, 0) * 1.4);
+  transform: translate3d(calc(var(--hm-px, 0) * 8px), calc(var(--hm-py, 0) * 6px + var(--hm-sx, 0) * -90px), 0);
+  transition: transform .6s cubic-bezier(.2, .7, .2, 1);
+}
+
+/* ---------- Channel partners ---------- */
+
+.home-page .hp-partners__list > li:nth-child(1) { --i: 0; }
+.home-page .hp-partners__list > li:nth-child(2) { --i: 1; }
+.home-page .hp-partners__list > li:nth-child(3) { --i: 2; }
+.home-page .hp-partners__list > li:nth-child(4) { --i: 3; }
+.home-page .hp-partners__list > li:nth-child(5) { --i: 4; }
+
+/* Tiles unfold from their left edge, then a glow wave runs along the row every few seconds. */
+.home-page .hp-partners__list > li {
+  transform-origin: 0 50%;
+  animation: hmUnfold .8s cubic-bezier(.3, 1.3, .5, 1) calc(1.3s + var(--i) * .09s) both;
+}
+
+.home-page .hp-partner::after {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  border-radius: inherit;
+  content: '';
+  pointer-events: none;
+  animation: hmGlowWave 6s ease-in-out calc(2.6s + var(--i) * .22s) infinite;
+}
+
+.home-page .hp-partner:hover::after { animation: none; }
+
+/* ---------- Who we are: stats ---------- */
+
+.home-page .hm-count { font-variant-numeric: tabular-nums; }
+.home-page .hp-stats > .scroll-reveal.is-revealed { animation: hmLand .95s cubic-bezier(.3, 1.2, .5, 1) calc(var(--reveal-delay, 0ms) * 1.6) both; }
+.home-page .hp-stats > .is-revealed .hp-stat__watermark { animation: hmSpinIn 1.3s cubic-bezier(.2, .8, .2, 1) calc(var(--reveal-delay, 0ms) * 1.6 + .35s) both; }
+
+/* ---------- Our approach ---------- */
+
+.home-page .hp-approach__grid > .scroll-reveal.is-revealed { animation: hmArc 1.15s cubic-bezier(.2, .8, .2, 1) calc(var(--reveal-delay, 0ms) * 1.7) both; }
+
+/* Bottom-right corner peels back like paper on hover. */
+.home-page .hm-curl {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-top-left-radius: 10px;
+  background: linear-gradient(315deg, var(--hp-charcoal) 50%, #f6e7d3 50%, #ecd4b4 72%, #d8bb93 100%);
+  box-shadow: -5px -5px 12px rgb(0 0 0 / 35%);
+  pointer-events: none;
+  transition: width .45s cubic-bezier(.3, 1.4, .5, 1), height .45s cubic-bezier(.3, 1.4, .5, 1);
+}
+
+.home-page .hp-approach__card:hover .hm-curl { width: 56px; height: 56px; }
+
+/* ---------- Industries ---------- */
+
+.home-page .hp-industry-grid > .scroll-reveal.is-revealed { animation: hmShuffle .8s cubic-bezier(.3, 1.35, .5, 1) var(--hm-d, 0ms) both; }
+
+/* ---------- Group companies ---------- */
+
+.home-page .hp-group__list > .scroll-reveal.is-revealed {
+  transform-origin: 0 50%;
+  animation: hmStretch .9s cubic-bezier(.3, 1.4, .5, 1) calc(var(--reveal-delay, 0ms) * 1.6) both;
+}
+
+/* Orange floods the row outward from its arrow. */
+.home-page .hp-company { position: relative; isolation: isolate; overflow: hidden; }
+
+.home-page .hp-company::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: var(--hp-orange);
+  clip-path: circle(0 at calc(100% - 52px) 50%);
+  content: '';
+  transition: clip-path .7s cubic-bezier(.6, .1, .2, 1);
+}
+
+.home-page .hp-company:hover { background: transparent; }
+.home-page .hp-company:hover::before { clip-path: circle(150% at calc(100% - 52px) 50%); }
+.home-page .hp-company:hover b,
+.home-page .hp-company:hover strong,
+.home-page .hp-company:hover small { color: #1a1b1a; }
+.home-page .hp-company:hover .hp-company__arrow { border-color: #1a1b1a; background: #1a1b1a; color: #fff; }
+
+/* The outline "Konark" slides sideways as the section scrolls past. */
+.home-page .hp-group__watermark { translate: calc(var(--hm-wx, .5) * -24% + 12%) 0; }
+
+/* ---------- Projects ---------- */
+
+.home-page .hp-projects__grid > .scroll-reveal.is-revealed { animation: hmFade .25s ease var(--reveal-delay, 0ms) both; }
+
+.home-page .hm-doors {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: flex;
+  pointer-events: none;
+}
+
+.home-page .hm-doors i { flex: 1; background: var(--hp-charcoal); }
+.home-page .hp-projects__grid > .is-revealed .hm-doors i:first-child { animation: hmDoorLeft 1.1s cubic-bezier(.7, 0, .2, 1) calc(var(--reveal-delay, 0ms) * 1.6 + .15s) both; }
+.home-page .hp-projects__grid > .is-revealed .hm-doors i:last-child { animation: hmDoorRight 1.1s cubic-bezier(.7, 0, .2, 1) calc(var(--reveal-delay, 0ms) * 1.6 + .15s) both; }
+
+/* Photos sit slightly oversized and drift inside their frames with scroll. */
+.home-page .hp-project img {
+  scale: 1.16;
+  translate: 0 var(--hm-py, 0px);
+  transition: transform .9s var(--hp-ease), translate .25s linear;
+}
+
+/* ---------- Testimonials ---------- */
+
+.home-page .hp-quotes > .scroll-reveal.is-revealed {
+  transform-origin: 0 100%;
+  animation: hmBubble .85s cubic-bezier(.3, 1.5, .5, 1) calc(var(--reveal-delay, 0ms) * 2.2) both;
+}
+
+.home-page .hp-quotes > .is-revealed .hp-quote__mark { animation: hmInk .7s cubic-bezier(.3, 1.7, .5, 1) calc(var(--reveal-delay, 0ms) * 2.2 + .45s) both; }
+
+/* ---------- CTA ---------- */
+
+.home-page .hm-cta .hp-cta__rays { display: none; }
+.home-page .hm-cta:not(.is-in) { opacity: 0; }
+.home-page .hm-cta.is-in { animation: hmOpenLine 1.05s cubic-bezier(.3, 1.3, .5, 1) both; }
+.home-page .hm-cta.is-in > * { animation: hmFade .6s ease .55s both; }
+
+.home-page .hm-ripple {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 45%);
+  pointer-events: none;
+  animation: hmRipple .7s ease-out forwards;
+}
+
+/* ---------- Motion ---------- */
+
+@keyframes hmSweep {
+  from { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+  to { -webkit-mask-position: 0 0; mask-position: 0 0; }
+}
+
+@keyframes hmUnfold {
+  from { opacity: 0; transform: scaleX(.25); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes hmGlowWave {
+  0%, 14%, 100% { box-shadow: inset 0 0 0 0 rgb(233 123 26 / 0%), 0 0 0 0 rgb(233 123 26 / 0%); }
+  6% { box-shadow: inset 0 0 0 2px rgb(233 123 26 / 55%), 0 0 26px 2px rgb(233 123 26 / 30%); }
+}
+
+@keyframes hmLand {
+  0% { opacity: 0; transform: translateY(-60px); }
+  55% { opacity: 1; transform: translateY(0) scale(1.05, .9); }
+  75% { transform: translateY(-6px) scale(.98, 1.03); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes hmSpinIn { from { opacity: 0; rotate: -140deg; scale: .4; } }
+
+@keyframes hmArc {
+  0% { opacity: 0; transform: translate(-80px, 120px) rotate(-11deg); }
+  55% { opacity: 1; transform: translate(-12px, -14px) rotate(2deg); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes hmShuffle {
+  from { opacity: 0; transform: scale(.8) rotate(var(--hm-r, 0deg)); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes hmStretch {
+  from { opacity: 0; transform: scaleX(.55); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes hmFade { from { opacity: 0; } to { opacity: 1; transform: none; } }
+@keyframes hmDoorLeft { to { transform: translateX(-101%); } }
+@keyframes hmDoorRight { to { transform: translateX(101%); } }
+
+@keyframes hmBubble {
+  from { opacity: 0; transform: scale(.25) rotate(-8deg); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes hmInk { from { opacity: 0; rotate: -40deg; scale: 0; } }
+
+@keyframes hmOpenLine {
+  from { opacity: 0; transform: scale(.72, .04); }
+  50% { opacity: 1; }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes hmRipple { to { opacity: 0; transform: scale(20); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-page *,
+  .home-page *::before,
+  .home-page *::after { animation: none !important; transition-duration: .01ms !important; }
+  .home-page .hm-doors,
+  .home-page .hm-ripple { display: none; }
+  .home-page .hm-cta:not(.is-in) { opacity: 1; }
+  .home-page .hp-hero .hp-hero__title .hp-line > span,
+  .home-page .hp-hero .hp-hero__eyebrow,
+  .home-page .hp-hero .hp-hero__lead,
+  .home-page .hp-hero .hp-hero__vision,
+  .home-page .hp-hero .hp-hero__actions,
+  .home-page .hp-hero .hp-hero__foot { -webkit-mask-image: none; mask-image: none; }
+}

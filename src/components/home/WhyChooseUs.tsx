@@ -21,6 +21,7 @@ export default function WhyChooseUs(){
           </div>
           <h3>{title}</h3>
           <p>{text}</p>
+          <span className="hm-curl" aria-hidden="true"/>
         </article>)}
       </RevealGroup>
     </div>

@@ -4,7 +4,8 @@ import Breadcrumb from '../../components/layout/Breadcrumb';
 import RevealGroup from '../../components/common/RevealGroup';
 import SectionTitle from '../../components/common/SectionTitle';
 import ContactCTA from '../../components/home/ContactCTA';
-import { aboutFeatureImage, awards, coreValues, leaders, missions, operationAreas, roadmap, targetImage, visionIcon } from '../../data/about';
+import { useBackgroundVideo } from '../../components/common/BackgroundVideo';
+import { awards, coreValues, leaders, missions, operationAreas, roadmap, targetImage, visionIcon } from '../../data/about';
 import '../../styles/home.css';
 import { useInView } from '../../hooks/useInView';
 import '../../styles/about.css';
@@ -41,8 +42,17 @@ function torchOff(event:PointerEvent<HTMLDivElement>){
 
 export default function About(){
   const [cta,ctaIn]=useInView<HTMLDivElement>();
+  const {videoProps,ready}=useBackgroundVideo();
   return <div className="about-page">
     <section className="ab-hero" aria-labelledby="ab-hero-title">
+      {/* aboutusvideo.mp4 plays when it is present in public/videos; until then the browser falls back to the homepage clip. */}
+      <div className="ab-hero__backdrop" aria-hidden="true">
+        <video {...videoProps} className={`ab-hero__video${ready?' is-ready':''}`}>
+          <source src="/videos/aboutusvideo.mp4" type="video/mp4"/>
+          <source src="/videos/welding.mp4" type="video/mp4"/>
+        </video>
+        <span className="ab-hero__shade"/>
+      </div>
       <span className="ab-hero__rays" aria-hidden="true"/>
       <div className="hp-shell ab-hero__inner">
         <div className="ab-hero__copy">
@@ -50,10 +60,6 @@ export default function About(){
           <p className="ab-hero__eyebrow"><i aria-hidden="true"/>About Konark Global</p>
           <h1 id="ab-hero-title">About Konark Global: <em>Industrial Solutions</em></h1>
           <p className="ab-hero__sub">Since 1994, Konark Global has been a trusted provider of industrial boilers, utility equipment and energy efficiency solutions.</p>
-        </div>
-        <div className="ab-hero__media">
-          <figure className="ab-hero__frame"><img src={aboutFeatureImage} alt="" fetchPriority="high" decoding="async"/></figure>
-          <div className="ab-hero__year" aria-hidden="true"><small>Since</small><strong>1994</strong></div>
         </div>
       </div>
     </section>

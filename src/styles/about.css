@@ -8,6 +8,9 @@
 .about-page .ab-hero {
   position: relative;
   isolation: isolate;
+  display: flex;
+  align-items: center;
+  min-height: min(720px, calc(100svh - 120px));
   overflow: hidden;
   padding-block: clamp(36px, 4.5vw, 64px) clamp(44px, 5vw, 72px);
   background:
@@ -27,6 +30,35 @@
   filter: blur(36px);
   pointer-events: none;
   animation: abBlob 18s ease-in-out infinite alternate;
+}
+
+.about-page .ab-hero__backdrop {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  pointer-events: none;
+}
+
+.about-page .ab-hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 60% 50%;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.about-page .ab-hero__video.is-ready { opacity: 1; }
+
+/* Darkest behind the copy, lighter on the right where the badge sits. */
+.about-page .ab-hero__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(0deg, rgb(28 29 28 / 70%) 0%, rgb(28 29 28 / 0%) 30%),
+    linear-gradient(90deg, rgb(28 29 28 / 94%) 0%, rgb(28 29 28 / 84%) 36%, rgb(28 29 28 / 44%) 68%, rgb(28 29 28 / 32%) 100%);
 }
 
 .about-page .ab-hero__inner {
@@ -81,60 +113,6 @@
   animation: abSkewIn .9s cubic-bezier(.2, .8, .2, 1) .7s both;
 }
 
-.about-page .ab-hero__media {
-  position: relative;
-  justify-self: end;
-  width: 100%;
-  max-width: 520px;
-}
-
-.about-page .ab-hero__frame {
-  margin: 0;
-  aspect-ratio: 1;
-  overflow: hidden;
-  border-radius: 28px;
-  background: #2b2d2b;
-  box-shadow: 0 40px 80px -30px rgb(0 0 0 / 70%), inset 0 0 0 1px rgb(255 255 255 / 8%);
-  animation: abCircle 1.4s cubic-bezier(.6, .1, .2, 1) .25s both;
-}
-
-.about-page .ab-hero__frame img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  animation: abPan 2.6s cubic-bezier(.2, .8, .2, 1) .25s both;
-}
-
-.about-page .ab-hero__year {
-  position: absolute;
-  bottom: 36px;
-  left: -36px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 18px 24px;
-  border: 1px solid rgb(255 255 255 / 14%);
-  border-radius: 18px;
-  background: rgb(28 29 28 / 65%);
-  box-shadow: 0 24px 48px -20px rgb(0 0 0 / 60%);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  animation: abJellyIn 1s ease 1s both;
-}
-
-.about-page .ab-hero__year small {
-  color: var(--hp-dark-text);
-  font: 600 .75rem/1 'DM Sans', sans-serif;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-}
-
-.about-page .ab-hero__year strong {
-  color: var(--hp-orange-on-dark);
-  font: 800 2.4rem/1 Manrope, sans-serif;
-  letter-spacing: -.05em;
-}
 
 /* ---------- Overview ---------- */
 
@@ -593,9 +571,8 @@
   .about-page .ab-hero__inner,
   .about-page .ab-overview__grid,
   .about-page .ab-vision__grid { grid-template-columns: minmax(0, 1fr); }
-  .about-page .ab-hero__media { justify-self: stretch; max-width: none; }
-  .about-page .ab-hero__frame { aspect-ratio: 16 / 11; }
-  .about-page .ab-hero__year { bottom: 18px; left: 18px; }
+  .about-page .ab-hero { min-height: 0; }
+  .about-page .ab-hero__shade { background: linear-gradient(0deg, rgb(28 29 28 / 70%) 0%, rgb(28 29 28 / 0%) 30%), rgb(28 29 28 / 76%); }
   .about-page .ab-mission__grid { grid-template-columns: minmax(0, 1fr); }
 }
 
@@ -605,8 +582,6 @@
 
 @media (max-width: 640px) {
   .about-page [id] { scroll-margin-top: 84px; }
-  .about-page .ab-hero__year { padding: 14px 18px; }
-  .about-page .ab-hero__year strong { font-size: 1.9rem; }
   .about-page .ab-leader { width: 100%; }
   .about-page .ab-operations__grid { grid-template-columns: minmax(0, 1fr); }
   .about-page .ab-area:last-child { grid-column: auto; }
@@ -620,7 +595,7 @@
 
 /* ---------- About motion ----------
    Its own vocabulary, separate from the other pages: morphing glow, outline-to-fill
-   title with shimmer, circle reveal, jelly badge, highlighter marks, tracing border,
+   title with shimmer over the hero video, highlighter marks, tracing border,
    springy zig-zag rows with wave letters, pendulum cards, block-wipe headings,
    diagonal wipe + colour torch portraits, trophy spin with confetti, radar sweep with
    blipping chips, domino milestones and a spring-in CTA. RevealGroup still supplies
@@ -833,21 +808,6 @@
 @keyframes abSkewIn {
   from { opacity: 0; transform: translateX(-40px) skewX(-14deg); }
   to { opacity: 1; transform: none; }
-}
-
-@keyframes abCircle {
-  from { clip-path: circle(0% at 68% 32%); }
-  to { clip-path: circle(75% at 50% 50%); }
-}
-
-@keyframes abPan { from { object-position: 72% 50%; } }
-
-@keyframes abJellyIn {
-  0% { opacity: 0; scale: .2 .2; }
-  40% { opacity: 1; scale: 1.16 .84; }
-  60% { scale: .92 1.08; }
-  80% { scale: 1.04 .97; }
-  100% { opacity: 1; scale: 1 1; }
 }
 
 @keyframes abJelly {

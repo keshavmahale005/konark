@@ -206,18 +206,28 @@
   pointer-events: none;
 }
 
-/* Sun-ray motif echoing the logo's petals, centred on the top-right corner. */
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__rays {
+/* Full-bleed welding video behind the hero; it fades in once its first frame is ready. */
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__video {
   position: absolute;
-  top: 0;
-  right: 0;
-  width: min(1500px, 160vw);
-  aspect-ratio: 1;
-  translate: 50% -50%;
-  background: repeating-conic-gradient(from 0deg, rgb(233 123 26 / 10%) 0deg 1.4deg, transparent 1.4deg 10deg);
-  -webkit-mask-image: radial-gradient(circle, #000 0 18%, transparent 62%);
-  mask-image: radial-gradient(circle, #000 0 18%, transparent 62%);
-  animation: hpSpin 180s linear infinite;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 60% 50%;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__video.is-ready { opacity: 1; }
+
+/* Darkest behind the copy on the left, lighter on the right so the video reads; fades into the footer. */
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(0deg, var(--hp-charcoal) 0%, rgb(28 29 28 / 0%) 32%),
+    linear-gradient(90deg, rgb(28 29 28 / 94%) 0%, rgb(28 29 28 / 84%) 34%, rgb(28 29 28 / 42%) 66%, rgb(28 29 28 / 30%) 100%),
+    radial-gradient(ellipse 60% 70% at 85% 10%, rgb(233 123 26 / 18%), transparent 65%);
 }
 
 :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__inner {
@@ -324,123 +334,6 @@
   animation: hpRise .8s var(--hp-ease) .6s both;
 }
 
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__media {
-  position: relative;
-  justify-self: end;
-  width: 100%;
-  max-width: 600px;
-}
-
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__frame {
-  position: relative;
-  height: clamp(420px, 60vh, 620px);
-  overflow: hidden;
-  border-radius: 28px;
-  background: #2b2d2b;
-  box-shadow: 0 40px 80px -30px rgb(0 0 0 / 70%), inset 0 0 0 1px rgb(255 255 255 / 8%);
-  animation: hpFrameIn 1.2s var(--hp-ease) .2s both;
-}
-
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__frame img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 48%;
-  filter: saturate(.85) contrast(1.04);
-  animation: hpSettle 1.8s var(--hp-ease) .2s both, hpDrift 24s ease-in-out 2s infinite alternate;
-}
-
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__frame::after {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, transparent 45%, rgb(18 19 18 / 70%)),
-    linear-gradient(90deg, rgb(233 123 26 / 14%), transparent 40%);
-  content: '';
-  pointer-events: none;
-}
-
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__card {
-  position: absolute;
-  bottom: 44px;
-  left: -36px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-width: 220px;
-  padding: 18px 22px;
-  border: 1px solid rgb(255 255 255 / 14%);
-  border-radius: 18px;
-  background: rgb(28 29 28 / 62%);
-  box-shadow: 0 24px 48px -20px rgb(0 0 0 / 60%);
-  -webkit-backdrop-filter: blur(16px) saturate(1.2);
-  backdrop-filter: blur(16px) saturate(1.2);
-  animation: hpRise .9s var(--hp-ease) .9s both, hpFloat 7s ease-in-out 2s infinite;
-}
-
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__card span {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--hp-dark-text);
-  font: 600 .75rem/1.3 'DM Sans', sans-serif;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-}
-
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__card i {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--hp-orange);
-  box-shadow: 0 0 0 4px rgb(233 123 26 / 20%);
-}
-
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__card strong {
-  color: #fff;
-  font: 700 1.75rem/1 Manrope, sans-serif;
-  letter-spacing: -.04em;
-}
-
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__badge {
-  position: absolute;
-  top: -34px;
-  right: -30px;
-  display: grid;
-  place-items: center;
-  width: 132px;
-  height: 132px;
-  border-radius: 50%;
-  background: var(--hp-charcoal);
-  box-shadow: 0 0 0 1px rgb(255 255 255 / 10%), 0 20px 40px -18px rgb(0 0 0 / 70%);
-  animation: hpRise .9s var(--hp-ease) 1s both;
-}
-
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__badge > svg {
-  position: absolute;
-  inset: 6px;
-  width: calc(100% - 12px);
-  height: calc(100% - 12px);
-  overflow: visible;
-  animation: hpSpin 26s linear infinite;
-}
-
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__badge text {
-  fill: #e4e6e1;
-  font: 700 9px Manrope, sans-serif;
-}
-
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__badge > span {
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: var(--hp-orange);
-  color: #1a1b1a;
-}
-
 :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__foot {
   display: flex;
   flex-wrap: wrap;
@@ -470,75 +363,180 @@
 }
 
 :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__foot a { transition: color .2s ease, gap .2s ease; }
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__foot-end { display: inline-flex; align-items: center; gap: 22px; }
+
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px 7px 10px;
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 6%);
+  color: #e4e6e1;
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: background-color .2s ease, border-color .2s ease;
+}
+
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__toggle:hover { border-color: rgb(255 255 255 / 35%); background: rgb(255 255 255 / 12%); }
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__toggle:focus-visible { outline: 3px solid var(--hp-orange); outline-offset: 3px; }
 :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__foot a:hover { gap: 16px; color: var(--hp-orange-on-dark); }
 :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__foot a svg { animation: hpNudge 2.2s ease-in-out infinite; }
 
-/* ---------- Channel partners ---------- */
+/* ---------- Channel partners: a showcase of large logo cards ---------- */
 
 :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(56px, 7vw, 96px);
   border-bottom: 1px solid var(--hp-line);
-  background: var(--hp-white);
+  background:
+    radial-gradient(ellipse 50% 70% at 50% 0%, rgb(233 123 26 / 9%), transparent 70%),
+    linear-gradient(180deg, #fff 0%, var(--hp-paper) 100%);
 }
 
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__inner {
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__head {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  justify-content: space-between;
   gap: 18px 48px;
-  padding-block: 28px;
+  margin-bottom: clamp(32px, 4vw, 48px);
 }
 
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__label {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  gap: 10px;
-  margin: 0;
-  padding-right: 48px;
-  border-right: 1px solid var(--hp-line);
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__title {
+  margin: 16px 0 0;
+  color: var(--hp-ink);
+  font: 700 clamp(1.9rem, 3.4vw, 3rem)/1.08 Manrope, sans-serif;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__title em { color: var(--hp-orange-large); font-style: normal; }
+
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__note {
+  max-width: 400px;
+  margin: 0 0 6px;
   color: var(--hp-muted);
-  font: 700 .75rem/1.3 'DM Sans', sans-serif;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-}
-
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__label i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--hp-orange);
+  font-size: 1rem;
+  line-height: 1.65;
 }
 
 :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__list {
-  display: flex;
-  flex: 1;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px 32px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__list a {
-  display: inline-flex;
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__list > li { display: flex; }
+
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--hp-line);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(31 32 31 / 4%), 0 18px 36px -30px rgb(31 32 31 / 35%);
+  transition: border-color .3s ease, box-shadow .35s ease, translate .35s var(--hp-ease);
+}
+
+/* Orange accent that slides across the top on hover. */
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner::before {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--hp-orange), #ffb066);
+  content: '';
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform .45s var(--hp-ease);
+}
+
+/* The logo files have white backgrounds, so the stage is white; taller files overflow and their white edges are clipped. */
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner__logo {
+  display: flex;
   align-items: center;
+  justify-content: center;
+  height: 132px;
+  overflow: hidden;
+  background: #fff;
+}
+
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner__logo img {
+  display: block;
+  flex: none;
+  max-width: none;
+  height: var(--logo-h, 80px);
+  object-fit: contain;
+  transition: transform .5s var(--hp-ease);
+}
+
+/* The Thermax JPG sits on #fdfdfd; a 1% lift makes its box disappear into the card. */
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner__logo img[src$='.jpg'] { filter: brightness(1.01); }
+
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner__meta {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   gap: 6px;
-  color: var(--hp-text);
-  font: 700 clamp(1rem, 1.45vw, 1.25rem)/1.2 Manrope, sans-serif;
-  letter-spacing: -.03em;
-  transition: color .2s ease;
+  padding: 16px 18px 18px;
+  border-top: 1px solid #f0ebe2;
+  background: linear-gradient(180deg, #fffdfa, #faf6ef);
 }
 
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__list a svg {
-  color: var(--hp-orange);
-  opacity: 0;
-  translate: -4px 4px;
-  transition: opacity .2s ease, translate .2s ease;
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner__meta strong {
+  color: var(--hp-ink);
+  font: 700 1.0625rem/1.2 Manrope, sans-serif;
+  letter-spacing: -.02em;
 }
 
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__list a:hover { color: var(--hp-orange-text); }
-:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__list a:hover svg { opacity: 1; translate: 0 0; }
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner__meta small {
+  color: var(--hp-muted);
+  font-size: .8125rem;
+  line-height: 1.45;
+}
+
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner__go {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid var(--hp-line);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--hp-ink);
+  transition: background-color .25s ease, border-color .25s ease, color .25s ease, transform .35s var(--hp-ease);
+}
+
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner:hover,
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner:focus-visible {
+  border-color: rgb(233 123 26 / 55%);
+  box-shadow: 0 0 0 4px rgb(233 123 26 / 12%), 0 30px 50px -30px rgb(168 82 12 / 55%);
+  translate: 0 -6px;
+}
+
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner:hover::before,
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner:focus-visible::before { transform: scaleX(1); }
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner:hover .hp-partner__logo img { transform: scale(1.06); }
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner:hover .hp-partner__meta strong { color: var(--hp-orange-text); }
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner:hover .hp-partner__go { border-color: var(--hp-orange); background: var(--hp-orange); color: #1a1b1a; transform: rotate(45deg); }
+:is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner:focus-visible { outline: 3px solid var(--hp-orange); outline-offset: 3px; }
 
 /* ---------- Who we are ---------- */
 
@@ -1249,26 +1247,6 @@
   to { transform: none; }
 }
 
-@keyframes hpFrameIn {
-  from { opacity: 0; clip-path: inset(8% 8% 8% 8% round 28px); }
-  to { opacity: 1; clip-path: inset(0 round 28px); }
-}
-
-@keyframes hpSettle {
-  from { transform: scale(1.16); }
-  to { transform: scale(1.04); }
-}
-
-@keyframes hpDrift {
-  from { transform: scale(1.04); }
-  to { transform: scale(1.1) translate(-1.5%, -1%); }
-}
-
-@keyframes hpFloat {
-  0%, 100% { transform: none; }
-  50% { transform: translateY(-8px); }
-}
-
 @keyframes hpSpin { to { transform: rotate(360deg); } }
 
 @keyframes hpPulse {
@@ -1288,11 +1266,10 @@
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-approach__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-approach__card { min-height: 0; }
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-approach__card h3 { margin-top: 48px; }
-  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__badge { right: -14px; width: 116px; height: 116px; }
-  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__badge > span { width: 46px; height: 46px; }
 }
 
 @media (max-width: 1100px) {
+  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-quotes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-quote:last-child { grid-column: 1 / -1; }
 }
@@ -1304,19 +1281,12 @@
 }
 
 @media (max-width: 900px) {
+  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__head { flex-direction: column; align-items: flex-start; }
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero { min-height: 0; padding-top: 44px; }
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__inner { grid-template-columns: minmax(0, 1fr); gap: 64px; }
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__title { font-size: clamp(2.4rem, 10.6vw, 4.6rem); }
-  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__media { justify-self: stretch; max-width: none; }
-  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__frame { height: clamp(300px, 62vw, 480px); }
-  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__card { bottom: 18px; left: 18px; }
-  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__badge { top: -48px; right: 18px; width: 100px; height: 100px; }
-  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__badge > span { width: 40px; height: 40px; }
-  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__badge > span svg { width: 18px; height: 18px; }
+  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__shade { background: linear-gradient(0deg, var(--hp-charcoal) 0%, rgb(28 29 28 / 0%) 30%), rgb(28 29 28 / 74%); }
 
-  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__inner { flex-direction: column; align-items: flex-start; }
-  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__label { padding-right: 0; border-right: 0; }
-  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__list { justify-content: flex-start; gap: 10px 28px; }
 
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-intro__grid { grid-template-columns: minmax(0, 1fr); }
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-intro__body { padding-top: 0; }
@@ -1337,13 +1307,20 @@
 }
 
 @media (max-width: 640px) {
+  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partners__list > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner { border-radius: 18px; }
+  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner__logo { height: 100px; }
+  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner__logo img { height: calc(var(--logo-h, 80px) * .76); }
+  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner__meta { padding: 12px 14px 14px; }
+  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner__meta strong { font-size: .9375rem; }
+  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner__meta small { font-size: .75rem; }
+  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-partner__go { width: 26px; height: 26px; }
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__title { margin: 22px 0 20px; }
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__eyebrow { padding: 8px 13px 8px 11px; font-size: .6875rem; letter-spacing: .12em; }
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__lead { font-size: 1rem; }
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__actions { flex-direction: column; align-items: stretch; margin-top: 30px; }
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__actions .hp-link { align-self: flex-start; }
-  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__card { min-width: 0; padding: 14px 18px; }
-  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__card strong { font-size: 1.4rem; }
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__foot { letter-spacing: .1em; }
 
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-stats { gap: 12px; }
@@ -1390,6 +1367,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero *,
-  :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-hero__rays,
   :is(.home-page, .about-page, .products-page, .contact-page, .career-page) .hp-cta__rays { animation: none !important; }
 }

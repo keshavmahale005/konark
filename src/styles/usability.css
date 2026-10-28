@@ -1,4 +1,4 @@
-﻿/* Focused usability corrections for the About page and shared footer. */
+﻿/* Focused usability corrections for the About page. The footer's styles live in footer.css. */
 :root{--type-caption:.75rem;--type-body:.875rem;--type-body-large:1rem;--type-card-title:1.125rem}
 .topline{font-size:var(--type-body);letter-spacing:.04em;text-transform:none}
 .desktop-nav a,.nav-dropdown>summary,.nav-dropdown-panel>a{font-size:var(--type-caption)!important}
@@ -18,19 +18,8 @@
 .about-content .timeline>div{position:relative;padding:20px 0 24px}
 .about-content .timeline>div::before{position:absolute;top:25px;left:-34px;width:11px;height:11px;border:2px solid var(--paper);border-radius:50%;background:var(--orange);box-shadow:0 0 0 1px var(--orange);content:''}
 .about-content .timeline p{max-width:720px;margin-bottom:0}
-.footer-main{color:#fff}
-.footer-main h2.footer-heading{margin:7px 0 21px;color:#fff;font:700 var(--type-body) 'DM Sans',sans-serif;letter-spacing:0;text-transform:none}
-.footer-main .footer-subhead{margin-top:28px}
-.footer-main>div:not(:first-child)>a,.footer-main>div>p,.footer-brand .footer-vision,.footer-main .footer-partners>span,.footer-bottom{font-size:var(--type-body)}
-.footer-main>div:not(:first-child)>a{margin:10px 0;color:#b9beb9}
-.footer-brand>p{font-size:var(--type-body-large)}
-.footer-brand .footer-vision{line-height:1.7}
-.footer-main .footer-partners>span{letter-spacing:.02em;text-transform:none}
-.footer-main .footer-partners>a{min-height:36px;align-items:center;justify-content:center;font-size:var(--type-body)}
-.footer-main>div>p,.footer-main .footer-partners>span,.footer-bottom{color:#b9beb9}
-.footer-bottom a{color:inherit;text-transform:none}
 @media(max-width:900px){.about-content .leader-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.about-content .leader-grid article:last-child:nth-child(odd){grid-column:1/-1;width:min(100%,34rem);justify-self:center}}
-@media(max-width:600px){.topline{font-size:var(--type-caption)}.about-content .leader-grid,.about-content .operation-grid{grid-template-columns:minmax(0,1fr)}.about-content .leader-grid article:last-child:nth-child(odd),.about-content .operation-grid article:last-child{grid-column:auto;width:auto}.about-content .value-list{grid-template-columns:repeat(2,minmax(0,1fr))}.about-content .timeline{padding-left:24px}.about-content .timeline>div::before{left:-30px}.footer-main .footer-partners>a{font-size:var(--type-caption)}}
+@media(max-width:600px){.topline{font-size:var(--type-caption)}.about-content .leader-grid,.about-content .operation-grid{grid-template-columns:minmax(0,1fr)}.about-content .leader-grid article:last-child:nth-child(odd),.about-content .operation-grid article:last-child{grid-column:auto;width:auto}.about-content .value-list{grid-template-columns:repeat(2,minmax(0,1fr))}.about-content .timeline{padding-left:24px}.about-content .timeline>div::before{left:-30px}}
 /* Keep the About page copy within the shared brand text palette. */
 .page-hero .eyebrow,
 .page-hero .page-hero-meta { color: #fff; }
@@ -49,7 +38,6 @@
 .about-content .award-list span,
 .about-content .timeline b,
 .about-content .approach-grid article > span { color: var(--orange-deep); }
-.footer-brand > p { color: #fff; }
 .about-feature{margin:36px 0 22px;max-width:960px;overflow:hidden;background:#efeee8}
 .about-feature img{display:block;width:100%;height:clamp(220px,34vw,440px);object-fit:cover}
 .about-products-link{margin-bottom:12px}
@@ -66,5 +54,4 @@
 .about-content .leader-photo{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#efeee8;margin-bottom:20px}
 .brand{min-width:150px}
 .brand .brand-logo{display:block;width:138px;height:auto;max-height:72px;object-fit:contain}
-.footer-brand .brand{width:max-content;min-width:0;padding:6px 10px;background:#fff}
 @media(max-width:600px){.brand{min-width:0}.brand .brand-logo{width:118px;max-height:62px}}

@@ -1,7 +1,8 @@
-// Same channel partners and destinations as the footer.
+// Channel partners, their destinations and logos: the homepage showcase and the footer both read this list.
 // Logos: the files konarkglobal.com hosts for each partner, plus Kirloskar's official mark
 // (kirloskarpumps.com), stored locally because that site blocks hotlinking.
-// `logoHeight` evens out the white margins baked into the files; the card clips them.
+// `logoHeight` evens out the white margins baked into the files at the homepage card's 132px logo
+// stage (the footer's 72px tiles scale it down); both clip the margins.
 // `range` summarises each partner's product family in data/products.ts.
 const media='https://www.konarkglobal.com/assets/images';
 export const channelPartners:{name:string;href:string;external:boolean;logo:string;logoHeight:number;range:string}[] = [

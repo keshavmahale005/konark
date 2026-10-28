@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import type { FormEvent, PointerEvent, ReactNode } from 'react';
+import type { CSSProperties, FormEvent, PointerEvent, ReactNode } from 'react';
 import { ArrowRight, ArrowUpRight, Briefcase, Building, ChevronDown, X, Phone, Mail, MapPin, User, Users } from 'lucide-react';
 import { navigation } from '../../data/navigation';
+import { channelPartners } from '../../data/partners';
 import { productPages } from '../../data/productPages';
 import { productGroups } from '../../data/products';
 import '../../styles/header.css';
+import '../../styles/footer.css';
 function Eyebrow({children,light=false}:{children:ReactNode;light?:boolean}){return <div className={`eyebrow ${light?'light':''}`}><i/>{children}</div>}// Same fields, types and required rules as before; the icons are decorative.
 const quoteFields:{name:string;label:string;Icon:typeof User;type?:string;autoComplete:string;required?:boolean}[]=[
   {name:'name',label:'Name',Icon:User,autoComplete:'name',required:true},
@@ -118,6 +120,17 @@ function Header(){
     nav.style.setProperty('--mega-gap',`${r.bottom-n.bottom}px`);
     nav.style.setProperty('--mega-max',`${document.documentElement.clientHeight-r.bottom-26}px`);
   },[]);
+  // The closed panel still has a layout box: left unmeasured or stale it hangs past the viewport and
+  // scrolls the page sideways. So it is placed on load and whenever the nav or the header row changes
+  // size (viewport resizes, web fonts loading), not only while open.
+  useLayoutEffect(()=>{
+    const nav=navRef.current,row=nav?.parentElement;
+    if(!nav||!row)return;
+    placeMega();
+    const observer=new ResizeObserver(placeMega);
+    observer.observe(nav);observer.observe(row);
+    return()=>observer.disconnect();
+  },[placeMega]);
   useLayoutEffect(()=>{
     if(menu!=='products')return;
     placeMega();
@@ -214,5 +227,53 @@ function Header(){
     {quoteOpen&&<QuoteDialog onClose={closeQuote}/>}
   </>;
 }
-function Footer(){const manufacturingLinks=['Distillation Columns Nashik','Heat Exchangers India','Pressure Vessels Nashik','Reactors Manufacturing','Tanks Fabrication','Chimney Manufacturers'];const serviceLinks=['Custom Fabrication Services','Boiler Overhauling','Equipment Ageing Analysis','Energy Audit Services','Fuel Conversion','Boiler Inspection','Erection and Commissioning','Boiler Descaling'];return <footer><div className="footer-main"><div className="footer-brand"><a className="brand inverse" href="/" aria-label="Konark Global home"><img className="brand-logo" src="/images/logo/logo.png" alt="Konark Global" width="272" height="146"/></a><p>Putting you in a winning position.</p><p className="footer-vision">“To be first choice for needs of industries attaining respect as a high-performance organization, providing sustainable solutions.”</p><div className="footer-partners"><span>Channel partners</span><a href="https://www.thermaxglobal.com/" target="_blank" rel="noreferrer">Thermax</a><a href="/atlas-copco">Atlas Copco</a><a href="/Aseries">Advance Cooling Tower</a><a href="/grundfos-pumps">Grundfos Pumps</a><a href="https://www.kirloskarpumps.com/" target="_blank" rel="noreferrer">Kirloskar Brothers</a></div></div><div><h2 className="footer-heading">Quick links</h2>{[['Home','/'],...navigation.filter(([,p])=>p!=='/join_the_team')].map(([n,p])=><a key={p} href={p}>{p==='/career'?'Careers':n}</a>)}<a href="/sitemap">Sitemap</a></div><div><h2 className="footer-heading">Products & manufacturing</h2>{manufacturingLinks.map(x=><a key={x} href="/manufacturing#manufacturing-capabilities">{x}</a>)}<a href="/manufacturing">Industrial Equipment Nashik</a><h2 className="footer-heading footer-subhead">Services</h2>{serviceLinks.map((x,i)=><a key={x} href="/services">{x}</a>)}</div><div><h2 className="footer-heading">Contact Konark Global</h2><p><MapPin size={15}/> C-14/2, M.I.D.C. Industrial Area,<br/>Satpur, Nashik - 422 007,<br/>Maharashtra, India.</p><a href="tel:02532361604"><Phone size={15}/>0253-2361604</a><a href="tel:+919422249499"><Phone size={15}/>+91 9422249499</a><a href="tel:+917888008030"><Phone size={15}/>7888008030</a><a href="mailto:sales@konarkglobal.com"><Mail size={15}/>sales@konarkglobal.com</a><a href="mailto:enquiry@konarkglobal.com"><Mail size={15}/>enquiry@konarkglobal.com</a></div></div><div className="footer-bottom"><span>© Copyright © 2025, All rights reserved with Konark Global</span><span>Technical partner: <a href="https://techgarner.in" target="_blank" rel="noreferrer">Techgarner IT Services Pvt. Ltd.</a></span></div></footer>}
+function Footer(){
+  const manufacturingLinks=['Distillation Columns Nashik','Heat Exchangers India','Pressure Vessels Nashik','Reactors Manufacturing','Tanks Fabrication','Chimney Manufacturers'];
+  const serviceLinks=['Custom Fabrication Services','Boiler Overhauling','Equipment Ageing Analysis','Energy Audit Services','Fuel Conversion','Boiler Inspection','Erection and Commissioning','Boiler Descaling'];
+  return <footer className="site-footer">
+    <div className="site-footer__main">
+      <div className="site-shell site-footer__grid">
+        <div className="site-footer__brand">
+          <a className="site-footer__logo" href="/" aria-label="Konark Global home"><img src="/images/logo/logo.png" alt="Konark Global" width="272" height="146"/></a>
+          <p className="site-footer__tagline">Putting you in a winning position.</p>
+          <p className="site-footer__vision">“To be first choice for needs of industries attaining respect as a high-performance organization, providing sustainable solutions.”</p>
+        </div>
+        <div className="site-footer__col site-footer__col--quick">
+          <h2 className="site-footer__heading">Quick links</h2>
+          {[['Home','/'],...navigation.filter(([,p])=>p!=='/join_the_team')].map(([n,p])=><a key={p} href={p}>{p==='/career'?'Careers':n}</a>)}
+          <a href="/sitemap">Sitemap</a>
+        </div>
+        <div className="site-footer__col site-footer__col--products">
+          <h2 className="site-footer__heading">Products & manufacturing</h2>
+          {manufacturingLinks.map(x=><a key={x} href="/manufacturing#manufacturing-capabilities">{x}</a>)}
+          <a href="/manufacturing">Industrial Equipment Nashik</a>
+        </div>
+        <div className="site-footer__col site-footer__col--services">
+          <h2 className="site-footer__heading">Services</h2>
+          {serviceLinks.map(x=><a key={x} href="/services">{x}</a>)}
+        </div>
+        <div className="site-footer__col site-footer__col--contact">
+          <h2 className="site-footer__heading">Contact Konark Global</h2>
+          <p><MapPin size={15}/><span>C-14/2, M.I.D.C. Industrial Area,<br/>Satpur, Nashik - 422 007,<br/>Maharashtra, India.</span></p>
+          <a href="tel:02532361604"><Phone size={15}/>0253-2361604</a>
+          <a href="tel:+919422249499"><Phone size={15}/>+91 9422249499</a>
+          <a href="tel:+917888008030"><Phone size={15}/>7888008030</a>
+          <a href="mailto:sales@konarkglobal.com"><Mail size={15}/>sales@konarkglobal.com</a>
+          <a href="mailto:enquiry@konarkglobal.com"><Mail size={15}/>enquiry@konarkglobal.com</a>
+        </div>
+        <div className="site-footer__partners">
+          <h2 className="site-footer__heading">Channel partners</h2>
+          <div className="site-footer__logos">
+            {channelPartners.map(({name,href,external,logo,logoHeight})=><a key={name} href={href} title={name} {...(external?{target:'_blank',rel:'noreferrer'}:{})}>
+              <img src={logo} alt={name} loading="lazy" decoding="async" style={{'--logo-h':`${logoHeight}px`} as CSSProperties}/>
+            </a>)}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div className="site-footer__bottom">
+      <div className="site-shell site-footer__legal"><span>© Copyright © 2025, All rights reserved with Konark Global</span><span>Technical partner: <a href="https://techgarner.in" target="_blank" rel="noreferrer">Techgarner IT Services Pvt. Ltd.</a></span></div>
+    </div>
+  </footer>;
+}
 export { Header, Footer };

@@ -1,0 +1,248 @@
+/* Shared site footer. Content sits in .site-shell (header.css), so its left and right edges line
+   up with the header and the page sections. The five columns are sized to their content and
+   spread with space-between, so the gaps between them are equal and the contact column ends on
+   the shell's right edge, above the end of the bottom bar. The channel-partner row shares the
+   same column lines (subgrid): its label sits under the brand, its logo tiles run from the
+   Quick links column to the contact column's right edge. */
+
+.site-footer {
+  background: #171b19;
+  color: #fff;
+}
+
+.site-footer__main { padding-block: 72px 64px; }
+
+.site-footer__grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 300px) repeat(4, minmax(min-content, max-content));
+  grid-template-areas:
+    "brand quick products services contact"
+    "partners partners partners partners partners";
+  justify-content: space-between;
+  align-items: start;
+  gap: 52px 40px;
+}
+
+.site-footer__brand { grid-area: brand; }
+.site-footer__col--quick { grid-area: quick; }
+.site-footer__col--products { grid-area: products; }
+.site-footer__col--services { grid-area: services; }
+.site-footer__col--contact { grid-area: contact; }
+
+/* ---------- Brand column ---------- */
+
+.site-footer__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* The logo PNG is dark artwork, so it keeps a white backing on the dark footer. */
+.site-footer__logo {
+  display: block;
+  padding: 6px 10px;
+  background: #fff;
+}
+
+.site-footer__logo img {
+  display: block;
+  width: 138px;
+  height: auto;
+}
+
+.site-footer__tagline {
+  margin: 22px 0 8px;
+  color: #fff;
+  font: 600 var(--type-body-large)/1.5 Manrope, sans-serif;
+}
+
+.site-footer__vision {
+  max-width: 300px;
+  margin: 0;
+  color: #959c95;
+  font-size: var(--type-body);
+  line-height: 1.7;
+}
+
+/* ---------- Link columns ---------- */
+
+/* One rhythm for every column: 12px between rows, 20px under the heading. */
+.site-footer__col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.site-footer__heading {
+  margin: 0 0 8px;
+  color: #fff;
+  font: 700 var(--type-body)/1.5 'DM Sans', sans-serif;
+  letter-spacing: 0;
+}
+
+.site-footer__col > a,
+.site-footer__col > p {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  color: #b9beb9;
+  font-size: var(--type-body);
+  line-height: 1.5;
+}
+
+.site-footer__col > a { transition: color .2s ease; }
+.site-footer__col > a:hover { color: var(--orange); }
+
+/* Icons sit in the same 15px + 10px slot, so the address and every phone and email line start at one edge. */
+.site-footer__col svg {
+  flex: none;
+  color: var(--orange);
+}
+
+/* The address runs over three lines; its pin stays centred on the first. */
+.site-footer__col > p { align-items: flex-start; }
+.site-footer__col > p svg { margin-top: 3px; }
+
+.site-footer a:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+}
+
+/* ---------- Channel partners ---------- */
+
+.site-footer__partners {
+  display: grid;
+  grid-area: partners;
+  grid-template-columns: subgrid;
+  align-items: center;
+  row-gap: 16px;
+  padding-top: 36px;
+  border-top: 1px solid rgb(255 255 255 / 10%);
+}
+
+.site-footer__partners > .site-footer__heading { grid-column: 1; margin: 0; }
+
+/* One equal-width tile per partner. inline-size containment keeps the row from widening the
+   link columns it spans. --tile is the tile height in px. */
+.site-footer__logos {
+  --tile: 88;
+  display: grid;
+  grid-column: 2 / -1;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: 16px;
+  contain: inline-size;
+}
+
+/* The logo files have white backgrounds, so the tiles are white, like the Konark logo's backing;
+   files taller than the tile have their white edges clipped. */
+.site-footer__logos > a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(var(--tile) * 1px);
+  overflow: hidden;
+  background: #fff;
+  transition: box-shadow .2s ease;
+}
+
+/* logoHeight (data/partners.ts) is tuned for the homepage's 132px logo stage; scaled to the tile. */
+.site-footer__logos img {
+  display: block;
+  flex: none;
+  max-width: none;
+  height: calc(var(--logo-h, 80px) * var(--tile) / 132);
+}
+
+/* The JPG logos sit on #fdfdfd; a 1% lift blends their box into the tile. */
+.site-footer__logos img[src$='.jpg'] { filter: brightness(1.01); }
+.site-footer__logos > a:hover { box-shadow: 0 0 0 3px var(--orange); }
+
+/* ---------- Bottom bar ---------- */
+
+.site-footer__bottom {
+  background: #121614;
+  color: #b9beb9;
+  font-size: var(--type-body);
+}
+
+.site-footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 24px;
+  padding-block: 18px;
+}
+
+.site-footer__legal a { color: inherit; transition: color .2s ease; }
+.site-footer__legal a:hover { color: #fff; }
+
+/* ---------- Responsive ---------- */
+
+/* Brand on its own row, logo beside its copy; the four link columns keep equal gaps beneath it;
+   the partner label moves above a full-width row of tiles. */
+@media (max-width: 1240px) {
+  .site-footer__grid {
+    grid-template-columns: repeat(4, minmax(min-content, max-content));
+    grid-template-areas:
+      "brand brand brand brand"
+      "quick products services contact"
+      "partners partners partners partners";
+    row-gap: 44px;
+  }
+
+  .site-footer__brand {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 520px);
+    align-items: center;
+    justify-items: start;
+    column-gap: 32px;
+  }
+
+  .site-footer__logo { grid-row: 1 / span 2; }
+  .site-footer__tagline { align-self: end; margin: 0 0 6px; }
+  .site-footer__vision { align-self: start; max-width: none; }
+  .site-footer__partners > .site-footer__heading,
+  .site-footer__logos { grid-column: 1 / -1; }
+  .site-footer__logos { --tile: 72; }
+}
+
+/* Two link columns: Products and Services stack beside Quick links, contact runs full width. */
+@media (max-width: 900px) {
+  .site-footer__main { padding-block: 56px 44px; }
+
+  .site-footer__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "brand brand"
+      "quick products"
+      "quick services"
+      "contact contact"
+      "partners partners";
+    gap: 40px 24px;
+  }
+
+  .site-footer__partners { padding-top: 32px; }
+  .site-footer__logos { --tile: 64; gap: 8px; }
+}
+
+/* Phones: brand stacked, partner tiles two to a row (an odd last tile spans both), bottom bar stacked. */
+@media (max-width: 600px) {
+  .site-footer__brand { display: flex; flex-direction: column; align-items: flex-start; }
+  .site-footer__tagline,
+  .site-footer__vision { align-self: auto; }
+  .site-footer__tagline { margin: 22px 0 8px; }
+  .site-footer__logos { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-flow: row; }
+  .site-footer__logos > a:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .site-footer__legal { flex-direction: column; align-items: flex-start; }
+}
+
+/* "Products & manufacturing" wraps onto two lines on phones; it and the Quick links heading beside
+   it reserve two lines, so the first links of the two columns stay on one row. */
+@media (max-width: 480px) {
+  .site-footer__col--quick > .site-footer__heading,
+  .site-footer__col--products > .site-footer__heading { min-height: 3em; }
+}
